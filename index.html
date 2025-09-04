@@ -277,6 +277,52 @@
             font-weight: 500;
         }
         
+        .present-personnel {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+        }
+        
+        .personnel-item {
+            display: flex;
+            align-items: center;
+            padding: 10px 15px;
+            margin: 8px 0;
+            background: #f8f9fa;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+        
+        .personnel-item:hover {
+            background: #e9ecef;
+            transform: translateX(-5px);
+        }
+        
+        .shift-badge {
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 500;
+            margin-left: 10px;
+        }
+        
+        .shift-a {
+            background: linear-gradient(135deg, #3498db, #2980b9);
+            color: white;
+        }
+        
+        .shift-b {
+            background: linear-gradient(135deg, #2ecc71, #27ae60);
+            color: white;
+        }
+        
+        .shift-c {
+            background: linear-gradient(135deg, #e74c3c, #c0392b);
+            color: white;
+        }
+        
         @media print {
             body * {
                 visibility: hidden;
@@ -329,8 +375,27 @@
             <div class="header text-center">
                 <h1>سیستم حضور و غیاب شیفت</h1>
                 <p class="mb-2">کاربر: {{ currentUser.name }} ({{ currentUser.role === 'admin' ? 'ادمین' : 'سرپرست شیفت' }})</p>
-                <p class="persian-date">امروز: {{ currentJalaliDate }}</p>
+                <p class="persian-date">امروز: {{ currentJalaliDate }} - {{ currentDayName }}</p>
                 <button class="btn btn-light btn-sm no-print" @click="logout">خروج</button>
+            </div>
+
+            <!-- نمایش پرسنل حاضر -->
+            <div class="present-personnel no-print" v-if="activeTab === 'attendance'">
+                <h4 class="mb-3">پرسنل حاضر در شیفت جاری ({{ attendanceData.shiftType }})</h4>
+                <div class="row">
+                    <div class="col-md-4" v-for="personnel in presentPersonnel" :key="personnel.id">
+                        <div class="personnel-item">
+                            <div>
+                                <strong>{{ personnel.name }} {{ personnel.family }}</strong>
+                                <div class="text-muted small">{{ personnel.position }}</div>
+                            </div>
+                            <span class="shift-badge" :class="'shift-' + personnel.shiftGroup.toLowerCase()">{{ personnel.shiftGroup }}</span>
+                        </div>
+                    </div>
+                    <div class="col-12" v-if="presentPersonnel.length === 0">
+                        <div class="alert alert-info text-center">هیچ پرسنلی برای شیفت جاری ثبت نشده است.</div>
+                    </div>
+                </div>
             </div>
 
             <!-- آمار کلی -->
@@ -402,11 +467,24 @@
                                 <div class="col-md-3">
                                     <label for="position" class="form-label">پست سازمانی</label>
                                     <select class="form-select" id="position" v-model="newPersonnel.position" required>
-                                        <option v-for="(positions, koor) in koorPositions" :key="koor">
-                                            <optgroup :label="koor">
-                                                <option v-for="position in positions" :value="position">{{ position }}</option>
-                                            </optgroup>
-                                        </option>
+                                        <option v-for="position in allPositions" :value="position">{{ position }}</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="row mt-3">
+                                <div class="col-md-4">
+                                    <label for="shiftGroup" class="form-label">گروه شیفت</label>
+                                    <select class="form-select" id="shiftGroup" v-model="newPersonnel.shiftGroup" required>
+                                        <option value="A">شیفت A</option>
+                                        <option value="B">شیفت B</option>
+                                        <option value="C">شیفت C</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-4">
+                                    <label for="isSupervisor" class="form-label">سرپرست شیفت</label>
+                                    <select class="form-select" id="isSupervisor" v-model="newPersonnel.isSupervisor" required>
+                                        <option value="no">خیر</option>
+                                        <option value="yes">بله</option>
                                     </select>
                                 </div>
                             </div>
@@ -422,6 +500,8 @@
                                         <th>شماره پرسنلی</th>
                                         <th>نام و نام خانوادگی</th>
                                         <th>پست سازمانی</th>
+                                        <th>گروه شیفت</th>
+                                        <th>سرپرست</th>
                                         <th>عملیات</th>
                                     </tr>
                                 </thead>
@@ -430,6 +510,8 @@
                                         <td>{{ personnel.personnelCode }}</td>
                                         <td>{{ personnel.name }} {{ personnel.family }}</td>
                                         <td>{{ personnel.position }}</td>
+                                        <td><span class="shift-badge" :class="'shift-' + personnel.shiftGroup.toLowerCase()">{{ personnel.shiftGroup }}</span></td>
+                                        <td>{{ personnel.isSupervisor === 'yes' ? 'بله' : 'خیر' }}</td>
                                         <td>
                                             <button class="btn btn-danger btn-sm" @click="deletePersonnel(personnel.id)">
                                                 <i class="bi bi-trash-fill me-1"></i>حذف
@@ -449,12 +531,12 @@
                     <div class="card-header">ثبت حضور و غیاب شیفت</div>
                     <div class="card-body">
                         <div class="row mb-4">
-                            <div class="col-md-4">
+                            <div class="col-md-3">
                                 <label for="shiftDate" class="form-label">تاریخ</label>
                                 <input type="date" class="form-control" id="shiftDate" v-model="attendanceData.date" required>
-                                <div class="persian-date mt-2">{{ jalaliDate }}</div>
+                                <div class="persian-date mt-2">{{ jalaliDate }} - {{ dayName }}</div>
                             </div>
-                            <div class="col-md-4">
+                            <div class="col-md-3">
                                 <label for="shiftType" class="form-label">نوع شیفت</label>
                                 <select class="form-select" id="shiftType" v-model="attendanceData.shiftType" required>
                                     <option value="صبح (۶-۱۴)">صبح (۶-۱۴)</option>
@@ -462,9 +544,19 @@
                                     <option value="شب (۲۲-۶)">شب (۲۲-۶)</option>
                                 </select>
                             </div>
-                            <div class="col-md-4">
+                            <div class="col-md-3">
+                                <label for="shiftGroup" class="form-label">گروه شیفت</label>
+                                <select class="form-select" id="shiftGroup" v-model="attendanceData.shiftGroup" required>
+                                    <option value="A">شیفت A</option>
+                                    <option value="B">شیفت B</option>
+                                    <option value="C">شیفت C</option>
+                                </select>
+                            </div>
+                            <div class="col-md-3">
                                 <label for="supervisor" class="form-label">سرپرست شیفت</label>
-                                <input type="text" class="form-control" id="supervisor" v-model="attendanceData.supervisor" required>
+                                <select class="form-select" id="supervisor" v-model="attendanceData.supervisor" required>
+                                    <option v-for="supervisor in shiftSupervisors" :value="supervisor.id">{{ supervisor.name }} {{ supervisor.family }}</option>
+                                </select>
                             </div>
                         </div>
 
@@ -616,7 +708,7 @@
 
     <script src="https://cdn.jsdelivr.net/npm/vue@3.2.45/dist/vue.global.js"></script>
     <script>
-        const { createApp, ref, reactive, computed, onMounted } = Vue;
+        const { createApp, ref, reactive, computed, onMounted, watch } = Vue;
         
         createApp({
             setup() {
@@ -638,13 +730,16 @@
                     name: '',
                     family: '',
                     personnelCode: '',
-                    position: ''
+                    position: '',
+                    shiftGroup: 'A',
+                    isSupervisor: 'no'
                 });
                 
                 // داده‌های حضور و غیاب
                 const attendanceData = reactive({
                     date: new Date().toISOString().split('T')[0],
                     shiftType: 'صبح (۶-۱۴)',
+                    shiftGroup: 'A',
                     supervisor: ''
                 });
                 
@@ -665,7 +760,8 @@
                         "ذوبکار کوره یک",
                         "متصدی ماشین خط یک",
                         "متصدی لهر خط یک",
-                        "متصدی برش و شیشه گیری خط یک"
+                        "متصدی برش و شیشه گیری خط یک",
+                        "سرپرست کوره یک"
                     ],
                     "کوره دو": [
                         "ذوبکار کوره دو",
@@ -674,9 +770,15 @@
                         "متصدی لهر خط دو",
                         "متصدی لهر خط سه",
                         "متصدی برش خط دو و سه",
-                        "شیشه گیری خط دو و سه"
+                        "شیشه گیری خط دو و سه",
+                        "سرپرست کوره دو"
                     ]
                 };
+                
+                // تمام پست‌ها در یک آرایه
+                const allPositions = computed(() => {
+                    return Object.values(koorPositions).flat();
+                });
                 
                 // تاریخ شمسی
                 const currentJalaliDate = computed(() => {
@@ -687,12 +789,44 @@
                     return toJalali(attendanceData.date);
                 });
                 
+                const currentDayName = computed(() => {
+                    return getDayName(new Date());
+                });
+                
+                const dayName = computed(() => {
+                    return getDayName(new Date(attendanceData.date));
+                });
+                
                 function toJalali(gregorianDate) {
                     if (!gregorianDate) return '';
                     const [year, month, day] = gregorianDate.split('-');
                     const jDate = dayjs(`${year}-${month}-${day}`).calendar('jalali').locale('fa');
                     return jDate.format('jYYYY/jMM/jDD');
                 }
+                
+                function getDayName(date) {
+                    const days = ['یکشنبه', 'دوشنبه', 'سه‌شنبه', 'چهارشنبه', 'پنجشنبه', 'جمعه', 'شنبه'];
+                    return days[date.getDay()];
+                }
+                
+                // سرپرستان شیفت
+                const shiftSupervisors = computed(() => {
+                    return personnels.value.filter(p => p.isSupervisor === 'yes' && p.shiftGroup === attendanceData.shiftGroup);
+                });
+                
+                // پرسنل حاضر
+                const presentPersonnel = computed(() => {
+                    const todayRecords = attendanceRecords.value.filter(record => 
+                        record.date === attendanceData.date && 
+                        record.shiftType === attendanceData.shiftType &&
+                        record.status === 'present'
+                    );
+                    
+                    return todayRecords.map(record => {
+                        const personnel = personnels.value.find(p => p.id === record.personnelId);
+                        return personnel ? { ...personnel, ...record } : null;
+                    }).filter(Boolean);
+                });
                 
                 // آمار
                 const todayRecordsCount = computed(() => {
@@ -708,6 +842,69 @@
                     return attendanceRecords.value.filter(record => record.status === 'leave').length;
                 });
                 
+                // چرخش شیفت‌ها
+                const rotateShifts = () => {
+                    const today = new Date();
+                    const dayOfWeek = today.getDay(); // 0: Sunday, 6: Saturday
+                    
+                    // اگر امروز شنبه است (6 در JavaScript)
+                    if (dayOfWeek === 6) {
+                        // چرخش شیفت‌ها
+                        const fridayNightShift = attendanceRecords.value.filter(record => {
+                            const recordDate = new Date(record.date);
+                            return recordDate.getDay() === 5 && record.shiftType === 'شب (۲۲-۶)';
+                        });
+                        
+                        const fridayEveningShift = attendanceRecords.value.filter(record => {
+                            const recordDate = new Date(record.date);
+                            return recordDate.getDay() === 5 && record.shiftType === 'عصر (۱۴-۲۲)';
+                        });
+                        
+                        const fridayMorningShift = attendanceRecords.value.filter(record => {
+                            const recordDate = new Date(record.date);
+                            return recordDate.getDay() === 5 && record.shiftType === 'صبح (۶-۱۴)';
+                        });
+                        
+                        // ایجاد رکوردهای جدید برای شنبه بر اساس چرخش
+                        const saturdayDate = new Date();
+                        saturdayDate.setDate(today.getDate() - 1); // رفتن به روز قبل (جمعه)
+                        const saturdayDateStr = saturdayDate.toISOString().split('T')[0];
+                        
+                        // اضافه کردن رکوردهای جدید برای شنبه
+                        fridayNightShift.forEach(record => {
+                            const newRecord = {
+                                ...record,
+                                id: Date.now().toString() + Math.random(),
+                                date: saturdayDateStr,
+                                shiftType: 'صبح (۶-۱۴)'
+                            };
+                            attendanceRecords.value.push(newRecord);
+                        });
+                        
+                        fridayEveningShift.forEach(record => {
+                            const newRecord = {
+                                ...record,
+                                id: Date.now().toString() + Math.random(),
+                                date: saturdayDateStr,
+                                shiftType: 'عصر (۱۴-۲۲)'
+                            };
+                            attendanceRecords.value.push(newRecord);
+                        });
+                        
+                        fridayMorningShift.forEach(record => {
+                            const newRecord = {
+                                ...record,
+                                id: Date.now().toString() + Math.random(),
+                                date: saturdayDateStr,
+                                shiftType: 'شب (۲۲-۶)'
+                            };
+                            attendanceRecords.value.push(newRecord);
+                        });
+                        
+                        saveToLocalStorage();
+                    }
+                };
+                
                 // توابع مربوط به ورود و خروج
                 const login = () => {
                     // در حالت واقعی باید با سرور چک شود
@@ -720,6 +917,9 @@
                         
                         // بارگذاری داده‌های ذخیره شده
                         loadFromLocalStorage();
+                        
+                        // چک کردن چرخش شیفت‌ها
+                        rotateShifts();
                     }
                 };
                 
@@ -739,7 +939,9 @@
                         name: newPersonnel.name,
                         family: newPersonnel.family,
                         personnelCode: newPersonnel.personnelCode,
-                        position: newPersonnel.position
+                        position: newPersonnel.position,
+                        shiftGroup: newPersonnel.shiftGroup,
+                        isSupervisor: newPersonnel.isSupervisor
                     });
                     
                     // ریست فرم
@@ -747,6 +949,8 @@
                     newPersonnel.family = '';
                     newPersonnel.personnelCode = '';
                     newPersonnel.position = '';
+                    newPersonnel.shiftGroup = 'A';
+                    newPersonnel.isSupervisor = 'no';
                     
                     saveToLocalStorage();
                 };
@@ -866,10 +1070,11 @@
                     // ایجاد برخی داده‌های نمونه برای نمایش
                     if (localStorage.getItem('personnels') === null) {
                         personnels.value = [
-                            { id: '1', name: 'علی', family: 'رضایی', personnelCode: '1001', position: 'ذوبکار کوره یک' },
-                            { id: '2', name: 'محمد', family: 'محمدی', personnelCode: '1002', position: 'متصدی ماشین خط یک' },
-                            { id: '3', name: 'حسن', family: 'حسینی', personnelCode: '1003', position: 'ذوبکار کوره دو' },
-                            { id: '4', name: 'رضا', family: 'کریمی', personnelCode: '1004', position: 'متصدی برش خط دو و سه' }
+                            { id: '1', name: 'علی', family: 'رضایی', personnelCode: '1001', position: 'ذوبکار کوره یک', shiftGroup: 'A', isSupervisor: 'no' },
+                            { id: '2', name: 'محمد', family: 'محمدی', personnelCode: '1002', position: 'متصدی ماشین خط یک', shiftGroup: 'A', isSupervisor: 'no' },
+                            { id: '3', name: 'حسن', family: 'حسینی', personnelCode: '1003', position: 'ذوبکار کوره دو', shiftGroup: 'B', isSupervisor: 'yes' },
+                            { id: '4', name: 'رضا', family: 'کریمی', personnelCode: '1004', position: 'متصدی برش خط دو و سه', shiftGroup: 'C', isSupervisor: 'no' },
+                            { id: '5', name: 'امیر', family: 'جعفری', personnelCode: '1005', position: 'سرپرست کوره یک', shiftGroup: 'A', isSupervisor: 'yes' }
                         ];
                     }
                     
@@ -882,6 +1087,20 @@
                     sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
                     reportData.startDate = sevenDaysAgo.toISOString().split('T')[0];
                     reportData.endDate = new Date().toISOString().split('T')[0];
+                    
+                    // تنظیم سرپرست پیش‌فرض
+                    if (shiftSupervisors.value.length > 0) {
+                        attendanceData.supervisor = shiftSupervisors.value[0].id;
+                    }
+                });
+                
+                // واکنش به تغییر گروه شیفت
+                watch(() => attendanceData.shiftGroup, (newVal) => {
+                    if (shiftSupervisors.value.length > 0) {
+                        attendanceData.supervisor = shiftSupervisors.value[0].id;
+                    } else {
+                        attendanceData.supervisor = '';
+                    }
                 });
                 
                 return {
@@ -895,8 +1114,13 @@
                     reportData,
                     reportResults,
                     koorPositions,
+                    allPositions,
+                    shiftSupervisors,
+                    presentPersonnel,
                     currentJalaliDate,
                     jalaliDate,
+                    currentDayName,
+                    dayName,
                     todayRecordsCount,
                     presentCount,
                     leaveCount,
