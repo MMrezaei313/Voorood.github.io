@@ -91,7 +91,7 @@
         }
         
         .form-check-input:checked {
-            background-color: var(--primary-color;
+            background-color: var(--primary-color);
             border-color: var(--primary-color);
         }
         
@@ -248,11 +248,10 @@
                                 <div class="col-md-3">
                                     <label for="position" class="form-label">پست سازمانی</label>
                                     <select class="form-select" id="position" v-model="newPersonnel.position" required>
-                                        <option v-for="(positions, koor) in koorPositions" :key="koor">
-                                            <optgroup :label="koor">
-                                                <option v-for="position in positions" :value="position">{{ position }}</option>
-                                            </optgroup>
-                                        </option>
+                                        <option value="">انتخاب پست سازمانی</option>
+                                        <optgroup v-for="(positions, koor) in koorPositions" :key="koor" :label="koor">
+                                            <option v-for="position in positions" :value="position">{{ position }}</option>
+                                        </optgroup>
                                     </select>
                                 </div>
                             </div>
@@ -649,24 +648,41 @@
                 
                 // چاپ گزارش
                 const printReport = () => {
-                    const printContent = document.querySelector('.print-section');
+                    const printContent = document.querySelector('.tab-content.active .print-section').innerHTML;
                     const originalContents = document.body.innerHTML;
                     
-                    document.body.innerHTML = printContent.innerHTML;
+                    document.body.innerHTML = `
+                        <div class="container">
+                            <div class="print-header">
+                                <h3>گزارش حضور و غیاب پرسنل</h3>
+                                <p class="persian-date">بازه زمانی: ${reportData.startDate} تا ${reportData.endDate}</p>
+                                ${reportData.shiftType ? `<p>شیفت: ${reportData.shiftType}</p>` : ''}
+                            </div>
+                            ${printContent}
+                        </div>
+                        <button class="btn btn-primary no-print" onclick="window.location.reload()" style="position:fixed; top:20px; left:20px;">بازگشت</button>
+                    `;
                     window.print();
                     document.body.innerHTML = originalContents;
-                    location.reload();
                 };
                 
                 // چاپ گزارش اضافه کاری
                 const printOvertimeReport = () => {
-                    const printContent = document.querySelector('.print-section');
+                    const printContent = document.querySelector('.tab-content.active .print-section').innerHTML;
                     const originalContents = document.body.innerHTML;
                     
-                    document.body.innerHTML = printContent.innerHTML;
+                    document.body.innerHTML = `
+                        <div class="container">
+                            <div class="print-header">
+                                <h3>گزارش اضافه کاری پرسنل</h3>
+                                <p class="persian-date">بازه زمانی: ${overtimeReportData.startDate} تا ${overtimeReportData.endDate}</p>
+                            </div>
+                            ${printContent}
+                        </div>
+                        <button class="btn btn-primary no-print" onclick="window.location.reload()" style="position:fixed; top:20px; left:20px;">بازگشت</button>
+                    `;
                     window.print();
                     document.body.innerHTML = originalContents;
-                    location.reload();
                 };
                 
                 // توابع مدیریت پرسنل
@@ -835,7 +851,7 @@
                             { id: '1', name: 'علی', family: 'رضایی', personnelCode: '1001', position: 'ذوبکار کوره یک' },
                             { id: '2', name: 'محمد', family: 'محمدی', personnelCode: '1002', position: 'متصدی ماشین خط یک' },
                             { id: '3', name: 'حسن', family: 'حسینی', personnelCode: '1003', position: 'ذوبکار کوره دو' },
-                            { id: '4', name: 'رضا', family: 'کریمی', personnelCode: '1004', position: 'متصدی برش خط دو و سه' },
+                            { id: '4', name: 'رضa', family: 'کریمی', personnelCode: '1004', position: 'متصدی برش خط دو و سه' },
                             { id: '5', name: 'امیر', family: 'جعفری', personnelCode: '1005', position: 'سرپرست کوره یک' },
                             { id: '6', name: 'محمد', family: 'کریمی', personnelCode: '1006', position: 'سرپرست کوره دو' }
                         ];
