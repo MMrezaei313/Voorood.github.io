@@ -323,6 +323,12 @@
             color: white;
         }
         
+        .jalali-date-input {
+            direction: rtl;
+            text-align: center;
+            font-family: 'Vazir', sans-serif;
+        }
+        
         @media print {
             body * {
                 visibility: hidden;
@@ -366,6 +372,11 @@
                     </div>
                     <button type="submit" class="btn btn-primary w-100">ورود به سیستم</button>
                 </form>
+                <div class="mt-3 p-2 bg-light rounded">
+                    <h6 class="text-center">اطلاعات ورود:</h6>
+                    <p class="mb-1">ادمین: admin / admin123</p>
+                    <p class="mb-0">سرپرست: supervisor / sup123</p>
+                </div>
             </div>
         </div>
 
@@ -532,7 +543,7 @@
                     <div class="card-body">
                         <div class="row mb-4">
                             <div class="col-md-3">
-                                <label for="shiftDate" class="form-label">تاریخ</label>
+                                <label for="shiftDate" class="form-label">تاریخ (میلادی)</label>
                                 <input type="date" class="form-control" id="shiftDate" v-model="attendanceData.date" required>
                                 <div class="persian-date mt-2">{{ jalaliDate }} - {{ dayName }}</div>
                             </div>
@@ -615,12 +626,14 @@
                     <div class="card-body">
                         <div class="row mb-4 no-print">
                             <div class="col-md-3">
-                                <label for="startDate" class="form-label">از تاریخ</label>
+                                <label for="startDate" class="form-label">از تاریخ (میلادی)</label>
                                 <input type="date" class="form-control" id="startDate" v-model="reportData.startDate">
+                                <div class="persian-date mt-2" v-if="reportData.startDate">{{ toJalali(reportData.startDate) }}</div>
                             </div>
                             <div class="col-md-3">
-                                <label for="endDate" class="form-label">تا تاریخ</label>
+                                <label for="endDate" class="form-label">تا تاریخ (میلادی)</label>
                                 <input type="date" class="form-control" id="endDate" v-model="reportData.endDate">
+                                <div class="persian-date mt-2" v-if="reportData.endDate">{{ toJalali(reportData.endDate) }}</div>
                             </div>
                             <div class="col-md-3">
                                 <label for="reportShift" class="form-label">شیفت</label>
@@ -658,7 +671,7 @@
                                 <table class="table table-striped table-bordered">
                                     <thead>
                                         <tr>
-                                            <th>تاریخ</th>
+                                            <th>تاریخ (شمسی)</th>
                                             <th>شیفت</th>
                                             <th>پرسنل</th>
                                             <th>پست سازمانی</th>
@@ -842,84 +855,25 @@
                     return attendanceRecords.value.filter(record => record.status === 'leave').length;
                 });
                 
-                // چرخش شیفت‌ها
-                const rotateShifts = () => {
-                    const today = new Date();
-                    const dayOfWeek = today.getDay(); // 0: Sunday, 6: Saturday
-                    
-                    // اگر امروز شنبه است (6 در JavaScript)
-                    if (dayOfWeek === 6) {
-                        // چرخش شیفت‌ها
-                        const fridayNightShift = attendanceRecords.value.filter(record => {
-                            const recordDate = new Date(record.date);
-                            return recordDate.getDay() === 5 && record.shiftType === 'شب (۲۲-۶)';
-                        });
-                        
-                        const fridayEveningShift = attendanceRecords.value.filter(record => {
-                            const recordDate = new Date(record.date);
-                            return recordDate.getDay() === 5 && record.shiftType === 'عصر (۱۴-۲۲)';
-                        });
-                        
-                        const fridayMorningShift = attendanceRecords.value.filter(record => {
-                            const recordDate = new Date(record.date);
-                            return recordDate.getDay() === 5 && record.shiftType === 'صبح (۶-۱۴)';
-                        });
-                        
-                        // ایجاد رکوردهای جدید برای شنبه بر اساس چرخش
-                        const saturdayDate = new Date();
-                        saturdayDate.setDate(today.getDate() - 1); // رفتن به روز قبل (جمعه)
-                        const saturdayDateStr = saturdayDate.toISOString().split('T')[0];
-                        
-                        // اضافه کردن رکوردهای جدید برای شنبه
-                        fridayNightShift.forEach(record => {
-                            const newRecord = {
-                                ...record,
-                                id: Date.now().toString() + Math.random(),
-                                date: saturdayDateStr,
-                                shiftType: 'صبح (۶-۱۴)'
-                            };
-                            attendanceRecords.value.push(newRecord);
-                        });
-                        
-                        fridayEveningShift.forEach(record => {
-                            const newRecord = {
-                                ...record,
-                                id: Date.now().toString() + Math.random(),
-                                date: saturdayDateStr,
-                                shiftType: 'عصر (۱۴-۲۲)'
-                            };
-                            attendanceRecords.value.push(newRecord);
-                        });
-                        
-                        fridayMorningShift.forEach(record => {
-                            const newRecord = {
-                                ...record,
-                                id: Date.now().toString() + Math.random(),
-                                date: saturdayDateStr,
-                                shiftType: 'شب (۲۲-۶)'
-                            };
-                            attendanceRecords.value.push(newRecord);
-                        });
-                        
-                        saveToLocalStorage();
-                    }
-                };
-                
                 // توابع مربوط به ورود و خروج
                 const login = () => {
-                    // در حالت واقعی باید با سرور چک شود
-                    if (loginData.username && loginData.password) {
+                    // بررسی اعتبار کاربر
+                    if (loginData.username === 'admin' && loginData.password === 'admin123' && loginData.role === 'admin') {
                         currentUser.value = {
-                            name: loginData.username,
-                            role: loginData.role
+                            name: 'مدیر سیستم',
+                            role: 'admin'
                         };
                         loggedIn.value = true;
-                        
-                        // بارگذاری داده‌های ذخیره شده
                         loadFromLocalStorage();
-                        
-                        // چک کردن چرخش شیفت‌ها
-                        rotateShifts();
+                    } else if (loginData.username === 'supervisor' && loginData.password === 'sup123' && loginData.role === 'supervisor') {
+                        currentUser.value = {
+                            name: 'سرپرست شیفت',
+                            role: 'supervisor'
+                        };
+                        loggedIn.value = true;
+                        loadFromLocalStorage();
+                    } else {
+                        alert('نام کاربری یا رمز عبور اشتباه است');
                     }
                 };
                 
