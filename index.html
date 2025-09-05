@@ -91,7 +91,7 @@
         }
         
         .form-check-input:checked {
-            background-color: var(--primary-color);
+            background-color: var(--primary-color;
             border-color: var(--primary-color);
         }
         
@@ -139,21 +139,37 @@
             font-size: 24px;
         }
         
+        .overtime-report {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #f8f9fa;
+            border-radius: 5px;
+            border: 1px solid #dee2e6;
+        }
+        
         @media print {
             body * {
                 visibility: hidden;
             }
-            .tab-content.active, .tab-content.active * {
+            .print-section, .print-section * {
                 visibility: visible;
             }
-            .tab-content.active {
+            .print-section {
                 position: absolute;
                 left: 0;
                 top: 0;
                 width: 100%;
+                padding: 20px;
+                background: white;
             }
             .no-print {
                 display: none !important;
+            }
+            .print-header {
+                text-align: center;
+                margin-bottom: 20px;
+                border-bottom: 2px solid #2c3e50;
+                padding-bottom: 10px;
             }
         }
     </style>
@@ -204,6 +220,9 @@
                 </li>
                 <li class="nav-item" role="presentation">
                     <button class="nav-link" :class="{ active: activeTab === 'reports' }" @click="activeTab = 'reports'">گزارشات</button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" :class="{ active: activeTab === 'overtime' }" @click="activeTab = 'overtime'">گزارش اضافه کاری</button>
                 </li>
             </ul>
 
@@ -362,49 +381,111 @@
                             <div class="col-md-3">
                                 <label class="form-label d-block">&nbsp;</label>
                                 <button class="btn btn-primary" @click="generateReport"> تولید گزارش</button>
-                                <button class="btn btn-success ms-2" @click="exportPDF" v-if="reportResults.length">خروجی PDF</button>
+                                <button class="btn btn-success ms-2" @click="printReport" v-if="reportResults.length">چاپ گزارش</button>
                             </div>
                         </div>
 
-                        <div class="table-responsive" v-if="reportResults.length">
-                            <table class="table table-striped table-bordered">
-                                <thead>
-                                    <tr>
-                                        <th>تاریخ (شمسی)</th>
-                                        <th>شیفت</th>
-                                        <th>پرسنل</th>
-                                        <th>پست سازمانی</th>
-                                        <th>وضعیت</th>
-                                        <th>اضافه کار</th>
-                                        <th>تعویض با</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr v-for="(item, index) in reportResults" :key="index">
-                                        <td>{{ item.date }}</td>
-                                        <td>{{ item.shiftType }}</td>
-                                        <td>{{ item.personnelName }}</td>
-                                        <td>{{ item.position }}</td>
-                                        <td>
-                                            <span class="status-badge" :class="{
-                                                'bg-success': item.status === 'present',
-                                                'bg-warning': item.status === 'leave'
-                                            }">
-                                                {{ item.status === 'present' ? 'حاضر' : 'مرخصی' }}
-                                            </span>
-                                        </td>
-                                        <td>
-                                            <span class="badge bg-info" v-if="item.overtime">اضافه کار</span>
-                                            <span v-else>-</span>
-                                        </td>
-                                        <td>{{ item.substituteWith || '-' }}</td>
-                                    </tr>
-                                </tbody>
-                            </table>
+                        <div class="print-section" v-if="reportResults.length">
+                            <div class="print-header no-print">
+                                <h3>گزارش حضور و غیاب پرسنل</h3>
+                                <p class="persian-date">بازه زمانی: {{ reportData.startDate }} تا {{ reportData.endDate }}</p>
+                                <p v-if="reportData.shiftType">شیفت: {{ reportData.shiftType }}</p>
+                            </div>
+                            <div class="table-responsive">
+                                <table class="table table-striped table-bordered">
+                                    <thead>
+                                        <tr>
+                                            <th>تاریخ (شمسی)</th>
+                                            <th>شیفت</th>
+                                            <th>پرسنل</th>
+                                            <th>پست سازمانی</th>
+                                            <th>وضعیت</th>
+                                            <th>اضافه کار</th>
+                                            <th>تعویض با</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr v-for="(item, index) in reportResults" :key="index">
+                                            <td>{{ item.date }}</td>
+                                            <td>{{ item.shiftType }}</td>
+                                            <td>{{ item.personnelName }}</td>
+                                            <td>{{ item.position }}</td>
+                                            <td>
+                                                <span class="status-badge" :class="{
+                                                    'bg-success': item.status === 'present',
+                                                    'bg-warning': item.status === 'leave'
+                                                }">
+                                                    {{ item.status === 'present' ? 'حاضر' : 'مرخصی' }}
+                                                </span>
+                                            </td>
+                                            <td>
+                                                <span class="badge bg-info" v-if="item.overtime">اضافه کار</span>
+                                                <span v-else>-</span>
+                                            </td>
+                                            <td>{{ item.substituteWith || '-' }}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
 
                         <div v-else class="alert alert-info no-print">
                             گزارشی برای نمایش وجود ندارد. لطفا فیلترهای مورد نظر خود را اعمال کنید.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- گزارش اضافه کاری -->
+            <div v-if="activeTab === 'overtime'" class="tab-pane fade show active">
+                <div class="card">
+                    <div class="card-header">گزارش اضافه کاری پرسنل</div>
+                    <div class="card-body">
+                        <div class="row mb-4 no-print">
+                            <div class="col-md-4">
+                                <label for="overtimeStartDate" class="form-label">از تاریخ (شمسی)</label>
+                                <input type="text" class="form-control date-picker" id="overtimeStartDate" v-model="overtimeReportData.startDate">
+                            </div>
+                            <div class="col-md-4">
+                                <label for="overtimeEndDate" class="form-label">تا تاریخ (شمسی)</label>
+                                <input type="text" class="form-control date-picker" id="overtimeEndDate" v-model="overtimeReportData.endDate">
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label d-block">&nbsp;</label>
+                                <button class="btn btn-primary" @click="generateOvertimeReport"> تولید گزارش</button>
+                                <button class="btn btn-success mt-2" @click="printOvertimeReport" v-if="overtimeReportResults.length">چاپ گزارش</button>
+                            </div>
+                        </div>
+
+                        <div class="print-section" v-if="overtimeReportResults.length">
+                            <div class="print-header no-print">
+                                <h3>گزارش اضافه کاری پرسنل</h3>
+                                <p class="persian-date">بازه زمانی: {{ overtimeReportData.startDate }} تا {{ overtimeReportData.endDate }}</p>
+                            </div>
+                            <div class="table-responsive">
+                                <table class="table table-striped table-bordered">
+                                    <thead>
+                                        <tr>
+                                            <th>نام و نام خانوادگی</th>
+                                            <th>شماره پرسنلی</th>
+                                            <th>پست سازمانی</th>
+                                            <th>تعداد اضافه کاری</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr v-for="(item, index) in overtimeReportResults" :key="index">
+                                            <td>{{ item.name }}</td>
+                                            <td>{{ item.personnelCode }}</td>
+                                            <td>{{ item.position }}</td>
+                                            <td>{{ item.overtimeCount }} شیفت</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <div v-else class="alert alert-info no-print">
+                            گزارشی برای نمایش وجود ندارد. لطفا بازه زمانی مورد نظر را انتخاب کنید.
                         </div>
                     </div>
                 </div>
@@ -464,6 +545,14 @@
                 });
                 
                 const reportResults = ref([]);
+                
+                // داده‌های گزارش اضافه کاری
+                const overtimeReportData = reactive({
+                    startDate: '',
+                    endDate: ''
+                });
+                
+                const overtimeReportResults = ref([]);
                 
                 // تعریف پست‌های سازمانی
                 const koorPositions = {
@@ -537,6 +626,8 @@
                     sevenDaysAgo.subtract('day', 7);
                     reportData.startDate = sevenDaysAgo.format('YYYY/MM/DD');
                     reportData.endDate = todayFormatted;
+                    overtimeReportData.startDate = sevenDaysAgo.format('YYYY/MM/DD');
+                    overtimeReportData.endDate = todayFormatted;
                     
                     // تنظیم سرپرست پیش‌فرض
                     if (supervisors.value.length > 0) {
@@ -554,6 +645,28 @@
                 // چاپ صفحه
                 const printPage = () => {
                     window.print();
+                };
+                
+                // چاپ گزارش
+                const printReport = () => {
+                    const printContent = document.querySelector('.print-section');
+                    const originalContents = document.body.innerHTML;
+                    
+                    document.body.innerHTML = printContent.innerHTML;
+                    window.print();
+                    document.body.innerHTML = originalContents;
+                    location.reload();
+                };
+                
+                // چاپ گزارش اضافه کاری
+                const printOvertimeReport = () => {
+                    const printContent = document.querySelector('.print-section');
+                    const originalContents = document.body.innerHTML;
+                    
+                    document.body.innerHTML = printContent.innerHTML;
+                    window.print();
+                    document.body.innerHTML = originalContents;
+                    location.reload();
                 };
                 
                 // توابع مدیریت پرسنل
@@ -646,9 +759,53 @@
                     reportResults.value = results;
                 };
                 
-                const exportPDF = () => {
-                    // در اینجا کد تولید PDF قرار می‌گیرد
-                    alert('امکان خروجی PDF در نسخه نمایشی فعال نیست. در نسخه کامل پیاده‌سازی خواهد شد.');
+                // گزارش اضافه کاری
+                const generateOvertimeReport = () => {
+                    let results = [...attendanceRecords.value];
+                    
+                    // فیلتر بر اساس تاریخ
+                    if (overtimeReportData.startDate) {
+                        results = results.filter(r => r.date >= overtimeReportData.startDate);
+                    }
+                    
+                    if (overtimeReportData.endDate) {
+                        results = results.filter(r => r.date <= overtimeReportData.endDate);
+                    }
+                    
+                    // فیلتر فقط اضافه کاری‌ها
+                    results = results.filter(r => r.overtime && r.personnelId);
+                    
+                    // گروه‌بندی بر اساس پرسنل و شمارش اضافه کاری‌ها
+                    const overtimeByPersonnel = {};
+                    
+                    results.forEach(record => {
+                        if (!overtimeByPersonnel[record.personnelId]) {
+                            overtimeByPersonnel[record.personnelId] = {
+                                overtimeCount: 0,
+                                personnelId: record.personnelId
+                            };
+                        }
+                        overtimeByPersonnel[record.personnelId].overtimeCount++;
+                    });
+                    
+                    // تبدیل به آرایه و افزودن اطلاعات پرسنل
+                    const overtimeResults = [];
+                    for (const personnelId in overtimeByPersonnel) {
+                        const personnel = personnels.value.find(p => p.id === personnelId);
+                        if (personnel) {
+                            overtimeResults.push({
+                                name: `${personnel.name} ${personnel.family}`,
+                                personnelCode: personnel.personnelCode,
+                                position: personnel.position,
+                                overtimeCount: overtimeByPersonnel[personnelId].overtimeCount
+                            });
+                        }
+                    }
+                    
+                    // مرتب‌سازی بر اساس تعداد اضافه کاری (نزولی)
+                    overtimeResults.sort((a, b) => b.overtimeCount - a.overtimeCount);
+                    
+                    overtimeReportResults.value = overtimeResults;
                 };
                 
                 // توابع ذخیره و بازیابی از localStorage
@@ -699,6 +856,8 @@
                     attendanceData,
                     reportData,
                     reportResults,
+                    overtimeReportData,
+                    overtimeReportResults,
                     koorPositions,
                     supervisors,
                     login,
@@ -711,8 +870,10 @@
                     toggleSubstitute,
                     saveAttendance,
                     generateReport,
-                    exportPDF,
-                    printPage
+                    generateOvertimeReport,
+                    printPage,
+                    printReport,
+                    printOvertimeReport
                 };
             }
         }).mount('#app');
