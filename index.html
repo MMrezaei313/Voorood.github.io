@@ -6,7 +6,17 @@
     <title>سیستم حضور و غیاب شیفت</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.rtl.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/persian-datepicker@1.2.0/dist/css/persian-datepicker.min.css">
     <style>
+        :root {
+            --primary-color: #3498db;
+            --secondary-color: #2c3e50;
+            --success-color: #27ae60;
+            --warning-color: #f39c12;
+            --danger-color: #e74c3c;
+            --light-color: #ecf0f1;
+        }
+        
         body {
             font-family: 'Vazir', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background-color: #f8f9fa;
@@ -14,34 +24,50 @@
         }
         
         .header {
-            background: linear-gradient(135deg, #2c3e50, #3498db);
+            background: linear-gradient(135deg, var(--secondary-color), var(--primary-color));
             color: white;
             border-radius: 10px;
             padding: 20px;
             margin-bottom: 20px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
         }
         
         .card {
             border-radius: 10px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
             margin-bottom: 20px;
             border: none;
         }
         
         .card-header {
-            background: linear-gradient(135deg, #3498db, #1a73e8);
+            background: linear-gradient(135deg, var(--primary-color), #1a73e8);
             color: white;
             border-radius: 10px 10px 0 0 !important;
             font-weight: bold;
         }
         
         .btn-primary {
-            background-color: #3498db;
+            background-color: var(--primary-color);
+            border: none;
+        }
+        
+        .btn-success {
+            background-color: var(--success-color);
+            border: none;
+        }
+        
+        .btn-warning {
+            background-color: var(--warning-color);
+            border: none;
+        }
+        
+        .btn-danger {
+            background-color: var(--danger-color);
             border: none;
         }
         
         .table th {
-            background-color: #2c3e50;
+            background-color: var(--secondary-color);
             color: white;
         }
         
@@ -54,9 +80,30 @@
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
         }
         
+        .nav-tabs .nav-link.active {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+        }
+        
+        .nav-tabs .nav-link {
+            color: var(--secondary-color);
+        }
+        
+        .form-check-input:checked {
+            background-color: var(--primary-color);
+            border-color: var(--primary-color);
+        }
+        
         .persian-date {
             font-family: 'Vazir', sans-serif;
             direction: rtl;
+        }
+        
+        .status-badge {
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 0.8rem;
         }
         
         .koor-header {
@@ -65,6 +112,14 @@
             padding: 8px 15px;
             border-radius: 5px;
             margin-top: 15px;
+        }
+        
+        .date-picker {
+            background-color: white;
+            border: 1px solid #ced4da;
+            border-radius: 5px;
+            padding: 8px 12px;
+            width: 100%;
         }
     </style>
 </head>
@@ -92,11 +147,6 @@
                     </div>
                     <button type="submit" class="btn btn-primary w-100">ورود به سیستم</button>
                 </form>
-                <div class="mt-3 p-2 bg-light rounded">
-                    <h6 class="text-center">اطلاعات ورود:</h6>
-                    <p class="mb-1">ادمین: admin / admin123</p>
-                    <p class="mb-0">سرپرست: supervisor / sup123</p>
-                </div>
             </div>
         </div>
 
@@ -106,7 +156,6 @@
             <div class="header text-center">
                 <h1>سیستم حضور و غیاب شیفت</h1>
                 <p>کاربر: {{ currentUser.name }} ({{ currentUser.role === 'admin' ? 'ادمین' : 'سرپرست شیفت' }})</p>
-                <p class="persian-date">امروز: {{ currentJalaliDate }}</p>
                 <button class="btn btn-light btn-sm" @click="logout">خروج</button>
             </div>
 
@@ -189,9 +238,8 @@
                     <div class="card-body">
                         <div class="row mb-4">
                             <div class="col-md-4">
-                                <label for="shiftDate" class="form-label">تاریخ</label>
-                                <input type="date" class="form-control" id="shiftDate" v-model="attendanceData.date" required>
-                                <div class="persian-date mt-2">{{ jalaliDate }}</div>
+                                <label for="shiftDate" class="form-label">تاریخ (شمسی)</label>
+                                <input type="text" class="form-control date-picker" id="shiftDate" v-model="attendanceData.date" required>
                             </div>
                             <div class="col-md-4">
                                 <label for="shiftType" class="form-label">نوع شیفت</label>
@@ -233,7 +281,7 @@
                                                 <label class="form-check-label">اضافه کار</label>
                                             </div>
                                             <div class="form-check form-check-inline">
-                                                <input class="form-check-input" type="checkbox" v-model="attendance.substitute">
+                                                <input class="form-check-input" type="checkbox" v-model="attendance.substitute" @change="toggleSubstitute(attendance)">
                                                 <label class="form-check-label">تعویض</label>
                                             </div>
                                             <div v-if="attendance.substitute" class="mt-2">
@@ -258,14 +306,12 @@
                     <div class="card-body">
                         <div class="row mb-4">
                             <div class="col-md-3">
-                                <label for="startDate" class="form-label">از تاریخ</label>
-                                <input type="date" class="form-control" id="startDate" v-model="reportData.startDate">
-                                <div class="persian-date mt-2" v-if="reportData.startDate">{{ toJalali(reportData.startDate) }}</div>
+                                <label for="startDate" class="form-label">از تاریخ (شمسی)</label>
+                                <input type="text" class="form-control date-picker" id="startDate" v-model="reportData.startDate">
                             </div>
                             <div class="col-md-3">
-                                <label for="endDate" class="form-label">تا تاریخ</label>
-                                <input type="date" class="form-control" id="endDate" v-model="reportData.endDate">
-                                <div class="persian-date mt-2" v-if="reportData.endDate">{{ toJalali(reportData.endDate) }}</div>
+                                <label for="endDate" class="form-label">تا تاریخ (شمسی)</label>
+                                <input type="text" class="form-control date-picker" id="endDate" v-model="reportData.endDate">
                             </div>
                             <div class="col-md-3">
                                 <label for="reportShift" class="form-label">شیفت</label>
@@ -279,6 +325,7 @@
                             <div class="col-md-3">
                                 <label class="form-label d-block">&nbsp;</label>
                                 <button class="btn btn-primary" @click="generateReport"> تولید گزارش</button>
+                                <button class="btn btn-success ms-2" @click="exportPDF" v-if="reportResults.length">خروجی PDF</button>
                             </div>
                         </div>
 
@@ -297,12 +344,12 @@
                                 </thead>
                                 <tbody>
                                     <tr v-for="(item, index) in reportResults" :key="index">
-                                        <td>{{ toJalali(item.date) }}</td>
+                                        <td>{{ item.date }}</td>
                                         <td>{{ item.shiftType }}</td>
                                         <td>{{ item.personnelName }}</td>
                                         <td>{{ item.position }}</td>
                                         <td>
-                                            <span class="badge" :class="{
+                                            <span class="status-badge" :class="{
                                                 'bg-success': item.status === 'present',
                                                 'bg-warning': item.status === 'leave'
                                             }">
@@ -329,6 +376,9 @@
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/vue@3.2.45/dist/vue.global.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/persian-date@1.1.0/dist/persian-date.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/persian-datepicker@1.2.0/dist/js/persian-datepicker.min.js"></script>
     <script>
         const { createApp, ref, reactive, computed, onMounted } = Vue;
         
@@ -357,7 +407,7 @@
                 
                 // داده‌های حضور و غیاب
                 const attendanceData = reactive({
-                    date: new Date().toISOString().split('T')[0],
+                    date: '',
                     shiftType: 'صبح (۶-۱۴)',
                     supervisor: ''
                 });
@@ -392,29 +442,6 @@
                     ]
                 };
                 
-                // تاریخ شمسی
-                const currentJalaliDate = computed(() => {
-                    return toJalali(new Date().toISOString().split('T')[0]);
-                });
-                
-                const jalaliDate = computed(() => {
-                    return toJalali(attendanceData.date);
-                });
-                
-                function toJalali(gregorianDate) {
-                    if (!gregorianDate) return '';
-                    const [year, month, day] = gregorianDate.split('-');
-                    
-                    // تبدیل تاریخ میلادی به شمسی (ساده‌شده)
-                    // این یک تبدیل ساده است و برای دقت بیشتر باید از کتابخانه‌های تخصصی استفاده کرد
-                    const jd = parseInt((((parseInt(year) + 621) * 12 + parseInt(month)) * 30 + parseInt(day)) / 30.6);
-                    const jy = jd - 621;
-                    const jm = (jd - jy * 12) + 1;
-                    const jd2 = jd - (jy * 12 + jm) * 30;
-                    
-                    return `${jy}/${jm < 10 ? '0' + jm : jm}/${jd2 < 10 ? '0' + jd2 : jd2}`;
-                }
-                
                 // توابع مربوط به ورود و خروج
                 const login = () => {
                     // بررسی اعتبار کاربر
@@ -425,6 +452,7 @@
                         };
                         loggedIn.value = true;
                         loadFromLocalStorage();
+                        initDatePickers();
                     } else if (loginData.username === 'supervisor' && loginData.password === 'sup123' && loginData.role === 'supervisor') {
                         currentUser.value = {
                             name: 'سرپرست شیفت',
@@ -432,6 +460,7 @@
                         };
                         loggedIn.value = true;
                         loadFromLocalStorage();
+                        initDatePickers();
                     } else {
                         alert('نام کاربری یا رمز عبور اشتباه است');
                     }
@@ -443,6 +472,29 @@
                     loginData.username = '';
                     loginData.password = '';
                     loginData.role = 'admin';
+                };
+                
+                // فعال‌سازی datepicker شمسی
+                const initDatePickers = () => {
+                    // تنظیم تاریخ امروز به صورت شمسی
+                    const today = new persianDate();
+                    const todayFormatted = today.format('YYYY/MM/DD');
+                    
+                    // تنظیم تاریخ‌های پیش‌فرض
+                    attendanceData.date = todayFormatted;
+                    
+                    // تنظیم ۷ روز پیش به صورت شمسی
+                    const sevenDaysAgo = new persianDate();
+                    sevenDaysAgo.subtract('day', 7);
+                    reportData.startDate = sevenDaysAgo.format('YYYY/MM/DD');
+                    reportData.endDate = todayFormatted;
+                    
+                    // فعال‌سازی datepicker روی تمام فیلدهای با کلاس date-picker
+                    $(".date-picker").persianDatepicker({
+                        format: 'YYYY/MM/DD',
+                        observer: true,
+                        initialValue: false
+                    });
                 };
                 
                 // توابع مدیریت پرسنل
@@ -493,6 +545,12 @@
                     });
                 };
                 
+                const toggleSubstitute = (attendance) => {
+                    if (!attendance.substitute) {
+                        attendance.substituteWith = '';
+                    }
+                };
+                
                 const saveAttendance = () => {
                     // ذخیره اطلاعات حضور و غیاب
                     saveToLocalStorage();
@@ -529,6 +587,11 @@
                     reportResults.value = results;
                 };
                 
+                const exportPDF = () => {
+                    // در اینجا کد تولید PDF قرار می‌گیرد
+                    alert('امکان خروجی PDF در نسخه نمایشی فعال نیست. در نسخه کامل پیاده‌سازی خواهد شد.');
+                };
+                
                 // توابع ذخیره و بازیابی از localStorage
                 const saveToLocalStorage = () => {
                     localStorage.setItem('personnels', JSON.stringify(personnels.value));
@@ -563,12 +626,6 @@
                     if (localStorage.getItem('attendanceRecords') === null) {
                         attendanceRecords.value = [];
                     }
-                    
-                    // تنظیم تاریخ پیش‌فرض برای گزارش به ۷ روز گذشته
-                    const sevenDaysAgo = new Date();
-                    sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
-                    reportData.startDate = sevenDaysAgo.toISOString().split('T')[0];
-                    reportData.endDate = new Date().toISOString().split('T')[0];
                 });
                 
                 return {
@@ -582,8 +639,6 @@
                     reportData,
                     reportResults,
                     koorPositions,
-                    currentJalaliDate,
-                    jalaliDate,
                     login,
                     logout,
                     addPersonnel,
@@ -591,9 +646,10 @@
                     getPersonnelByPosition,
                     getAttendanceByPosition,
                     addAnotherPersonnel,
+                    toggleSubstitute,
                     saveAttendance,
                     generateReport,
-                    toJalali
+                    exportPDF
                 };
             }
         }).mount('#app');
