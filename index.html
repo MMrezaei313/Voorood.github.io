@@ -6,345 +6,65 @@
     <title>سیستم حضور و غیاب شیفت</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.rtl.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.25/jspdf.plugin.autotable.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/dayjs@1.10.7/dayjs.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/dayjs@1.10.7/locale/fa.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/dayjs-jalali@1.10.2/dayjs-jalali.min.js"></script>
     <style>
-        :root {
-            --primary-color: #3498db;
-            --secondary-color: #2c3e50;
-            --success-color: #27ae60;
-            --warning-color: #f39c12;
-            --danger-color: #e74c3c;
-            --light-color: #ecf0f1;
-            --gradient-start: #2c3e50;
-            --gradient-end: #4ca1af;
-        }
-        
         body {
             font-family: 'Vazir', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            background-color: #f8f9fa;
             padding-top: 20px;
-            min-height: 100vh;
         }
         
         .header {
-            background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
+            background: linear-gradient(135deg, #2c3e50, #3498db);
             color: white;
-            border-radius: 15px;
-            padding: 25px;
-            margin-bottom: 25px;
-            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
-            position: relative;
-            overflow: hidden;
-        }
-        
-        .header::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            right: -50%;
-            width: 100%;
-            height: 200%;
-            background: rgba(255, 255, 255, 0.1);
-            transform: rotate(25deg);
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
         }
         
         .card {
-            border-radius: 15px;
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
-            margin-bottom: 25px;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
             border: none;
-            transition: transform 0.3s ease;
-        }
-        
-        .card:hover {
-            transform: translateY(-5px);
         }
         
         .card-header {
-            background: linear-gradient(135deg, var(--primary-color), #1a73e8);
+            background: linear-gradient(135deg, #3498db, #1a73e8);
             color: white;
-            border-radius: 15px 15px 0 0 !important;
+            border-radius: 10px 10px 0 0 !important;
             font-weight: bold;
-            padding: 15px 20px;
-            font-size: 1.1rem;
         }
         
         .btn-primary {
-            background: linear-gradient(135deg, var(--primary-color), #1a73e8);
+            background-color: #3498db;
             border: none;
-            border-radius: 8px;
-            padding: 10px 20px;
-            font-weight: 500;
-            transition: all 0.3s ease;
-        }
-        
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
-        }
-        
-        .btn-success {
-            background: linear-gradient(135deg, var(--success-color), #2ecc71);
-            border: none;
-            border-radius: 8px;
-            padding: 10px 20px;
-            font-weight: 500;
-            transition: all 0.3s ease;
-        }
-        
-        .btn-success:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
-        }
-        
-        .btn-warning {
-            background: linear-gradient(135deg, var(--warning-color), #f1c40f);
-            border: none;
-            border-radius: 8px;
-            padding: 10px 20px;
-            font-weight: 500;
-            transition: all 0.3s ease;
-        }
-        
-        .btn-warning:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
-        }
-        
-        .btn-danger {
-            background: linear-gradient(135deg, var(--danger-color), #c0392b);
-            border: none;
-            border-radius: 8px;
-            padding: 10px 20px;
-            font-weight: 500;
-            transition: all 0.3s ease;
-        }
-        
-        .btn-danger:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
         }
         
         .table th {
-            background: linear-gradient(135deg, var(--secondary-color), #34495e);
+            background-color: #2c3e50;
             color: white;
-            padding: 12px 15px;
-        }
-        
-        .table td {
-            padding: 12px 15px;
-            vertical-align: middle;
         }
         
         .login-container {
-            max-width: 450px;
+            max-width: 400px;
             margin: 100px auto;
-            padding: 30px;
-            background: white;
-            border-radius: 15px;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
-            position: relative;
-            overflow: hidden;
-        }
-        
-        .login-container::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            right: 0;
-            width: 100%;
-            height: 5px;
-            background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
-        }
-        
-        .nav-tabs .nav-link.active {
-            background: linear-gradient(135deg, var(--primary-color), #1a73e8);
-            color: white;
-            border: none;
-            border-radius: 8px 8px 0 0;
-            font-weight: 500;
-        }
-        
-        .nav-tabs .nav-link {
-            color: var(--secondary-color);
-            border-radius: 8px 8px 0 0;
-            padding: 12px 25px;
-            transition: all 0.3s ease;
-        }
-        
-        .nav-tabs .nav-link:hover {
-            background-color: rgba(52, 152, 219, 0.1);
-        }
-        
-        .form-check-input:checked {
-            background-color: var(--primary-color);
-            border-color: var(--primary-color);
+            padding: 20px;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
         }
         
         .persian-date {
             font-family: 'Vazir', sans-serif;
             direction: rtl;
-            font-weight: 500;
-        }
-        
-        .status-badge {
-            padding: 7px 14px;
-            border-radius: 20px;
-            font-size: 0.85rem;
-            font-weight: 500;
         }
         
         .koor-header {
-            background: linear-gradient(135deg, #e9ecef, #dee2e6);
+            background-color: #e9ecef;
             font-weight: bold;
-            padding: 12px 20px;
-            border-radius: 8px;
-            margin-top: 20px;
-            border-right: 4px solid var(--primary-color);
-        }
-        
-        .print-btn {
-            position: fixed;
-            bottom: 30px;
-            left: 30px;
-            z-index: 100;
-            width: 60px;
-            height: 60px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
-            background: linear-gradient(135deg, var(--primary-color), #1a73e8);
-            color: white;
-            font-size: 24px;
-            transition: all 0.3s ease;
-        }
-        
-        .print-btn:hover {
-            transform: scale(1.1);
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
-        }
-        
-        .j-date-picker {
-            background-color: white;
-            border: 1px solid #ced4da;
-            border-radius: 8px;
-            padding: 10px 15px;
-            width: 100%;
-        }
-        
-        .attendance-item {
-            border-radius: 10px;
-            margin-bottom: 15px;
-            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
-            transition: all 0.3s ease;
-        }
-        
-        .attendance-item:hover {
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-        }
-        
-        .stats-box {
-            background: white;
-            border-radius: 12px;
-            padding: 20px;
-            text-align: center;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
-            margin-bottom: 20px;
-            transition: all 0.3s ease;
-        }
-        
-        .stats-box:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
-        }
-        
-        .stats-number {
-            font-size: 2.5rem;
-            font-weight: 700;
-            color: var(--primary-color);
-            margin: 10px 0;
-        }
-        
-        .stats-title {
-            font-size: 1.1rem;
-            color: var(--secondary-color);
-            font-weight: 500;
-        }
-        
-        .present-personnel {
-            background: white;
-            border-radius: 12px;
-            padding: 20px;
-            margin-bottom: 20px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
-        }
-        
-        .personnel-item {
-            display: flex;
-            align-items: center;
-            padding: 10px 15px;
-            margin: 8px 0;
-            background: #f8f9fa;
-            border-radius: 8px;
-            transition: all 0.3s ease;
-        }
-        
-        .personnel-item:hover {
-            background: #e9ecef;
-            transform: translateX(-5px);
-        }
-        
-        .shift-badge {
-            padding: 5px 10px;
-            border-radius: 20px;
-            font-size: 0.75rem;
-            font-weight: 500;
-            margin-left: 10px;
-        }
-        
-        .shift-a {
-            background: linear-gradient(135deg, #3498db, #2980b9);
-            color: white;
-        }
-        
-        .shift-b {
-            background: linear-gradient(135deg, #2ecc71, #27ae60);
-            color: white;
-        }
-        
-        .shift-c {
-            background: linear-gradient(135deg, #e74c3c, #c0392b);
-            color: white;
-        }
-        
-        .jalali-date-input {
-            direction: rtl;
-            text-align: center;
-            font-family: 'Vazir', sans-serif;
-        }
-        
-        @media print {
-            body * {
-                visibility: hidden;
-            }
-            .print-section, .print-section * {
-                visibility: visible;
-            }
-            .print-section {
-                position: absolute;
-                left: 0;
-                top: 0;
-                width: 100%;
-            }
-            .no-print {
-                display: none !important;
-            }
+            padding: 8px 15px;
+            border-radius: 5px;
+            margin-top: 15px;
         }
     </style>
 </head>
@@ -385,74 +105,21 @@
             <!-- هدر -->
             <div class="header text-center">
                 <h1>سیستم حضور و غیاب شیفت</h1>
-                <p class="mb-2">کاربر: {{ currentUser.name }} ({{ currentUser.role === 'admin' ? 'ادمین' : 'سرپرست شیفت' }})</p>
-                <p class="persian-date">امروز: {{ currentJalaliDate }} - {{ currentDayName }}</p>
-                <button class="btn btn-light btn-sm no-print" @click="logout">خروج</button>
-            </div>
-
-            <!-- نمایش پرسنل حاضر -->
-            <div class="present-personnel no-print" v-if="activeTab === 'attendance'">
-                <h4 class="mb-3">پرسنل حاضر در شیفت جاری ({{ attendanceData.shiftType }})</h4>
-                <div class="row">
-                    <div class="col-md-4" v-for="personnel in presentPersonnel" :key="personnel.id">
-                        <div class="personnel-item">
-                            <div>
-                                <strong>{{ personnel.name }} {{ personnel.family }}</strong>
-                                <div class="text-muted small">{{ personnel.position }}</div>
-                            </div>
-                            <span class="shift-badge" :class="'shift-' + personnel.shiftGroup.toLowerCase()">{{ personnel.shiftGroup }}</span>
-                        </div>
-                    </div>
-                    <div class="col-12" v-if="presentPersonnel.length === 0">
-                        <div class="alert alert-info text-center">هیچ پرسنلی برای شیفت جاری ثبت نشده است.</div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- آمار کلی -->
-            <div class="row no-print">
-                <div class="col-md-3">
-                    <div class="stats-box">
-                        <div class="stats-title">تعداد پرسنل</div>
-                        <div class="stats-number">{{ personnels.length }}</div>
-                    </div>
-                </div>
-                <div class="col-md-3">
-                    <div class="stats-box">
-                        <div class="stats-title">ثبت‌های امروز</div>
-                        <div class="stats-number">{{ todayRecordsCount }}</div>
-                    </div>
-                </div>
-                <div class="col-md-3">
-                    <div class="stats-box">
-                        <div class="stats-title">حاضران</div>
-                        <div class="stats-number">{{ presentCount }}</div>
-                    </div>
-                </div>
-                <div class="col-md-3">
-                    <div class="stats-box">
-                        <div class="stats-title">مرخصی</div>
-                        <div class="stats-number">{{ leaveCount }}</div>
-                    </div>
-                </div>
+                <p>کاربر: {{ currentUser.name }} ({{ currentUser.role === 'admin' ? 'ادمین' : 'سرپرست شیفت' }})</p>
+                <p class="persian-date">امروز: {{ currentJalaliDate }}</p>
+                <button class="btn btn-light btn-sm" @click="logout">خروج</button>
             </div>
 
             <!-- تب‌ها -->
-            <ul class="nav nav-tabs mb-4 no-print" id="myTab" role="tablist">
+            <ul class="nav nav-tabs mb-4" id="myTab" role="tablist">
                 <li class="nav-item" role="presentation" v-if="currentUser.role === 'admin'">
-                    <button class="nav-link" :class="{ active: activeTab === 'personnel' }" @click="activeTab = 'personnel'">
-                        <i class="bi bi-people-fill me-2"></i>مدیریت پرسنل
-                    </button>
+                    <button class="nav-link" :class="{ active: activeTab === 'personnel' }" @click="activeTab = 'personnel'">مدیریت پرسنل</button>
                 </li>
                 <li class="nav-item" role="presentation">
-                    <button class="nav-link" :class="{ active: activeTab === 'attendance' }" @click="activeTab = 'attendance'">
-                        <i class="bi bi-clipboard-check-fill me-2"></i>ثبت حضور و غیاب
-                    </button>
+                    <button class="nav-link" :class="{ active: activeTab === 'attendance' }" @click="activeTab = 'attendance'">ثبت حضور و غیاب</button>
                 </li>
                 <li class="nav-item" role="presentation">
-                    <button class="nav-link" :class="{ active: activeTab === 'reports' }" @click="activeTab = 'reports'">
-                        <i class="bi bi-graph-up me-2"></i>گزارشات
-                    </button>
+                    <button class="nav-link" :class="{ active: activeTab === 'reports' }" @click="activeTab = 'reports'">گزارشات</button>
                 </li>
             </ul>
 
@@ -478,30 +145,15 @@
                                 <div class="col-md-3">
                                     <label for="position" class="form-label">پست سازمانی</label>
                                     <select class="form-select" id="position" v-model="newPersonnel.position" required>
-                                        <option v-for="position in allPositions" :value="position">{{ position }}</option>
+                                        <option v-for="(positions, koor) in koorPositions" :key="koor">
+                                            <optgroup :label="koor">
+                                                <option v-for="position in positions" :value="position">{{ position }}</option>
+                                            </optgroup>
+                                        </option>
                                     </select>
                                 </div>
                             </div>
-                            <div class="row mt-3">
-                                <div class="col-md-4">
-                                    <label for="shiftGroup" class="form-label">گروه شیفت</label>
-                                    <select class="form-select" id="shiftGroup" v-model="newPersonnel.shiftGroup" required>
-                                        <option value="A">شیفت A</option>
-                                        <option value="B">شیفت B</option>
-                                        <option value="C">شیفت C</option>
-                                    </select>
-                                </div>
-                                <div class="col-md-4">
-                                    <label for="isSupervisor" class="form-label">سرپرست شیفت</label>
-                                    <select class="form-select" id="isSupervisor" v-model="newPersonnel.isSupervisor" required>
-                                        <option value="no">خیر</option>
-                                        <option value="yes">بله</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <button type="submit" class="btn btn-success mt-3">
-                                <i class="bi bi-person-plus-fill me-2"></i>افزودن پرسنل
-                            </button>
+                            <button type="submit" class="btn btn-success mt-3">افزودن پرسنل</button>
                         </form>
 
                         <div class="table-responsive">
@@ -511,8 +163,6 @@
                                         <th>شماره پرسنلی</th>
                                         <th>نام و نام خانوادگی</th>
                                         <th>پست سازمانی</th>
-                                        <th>گروه شیفت</th>
-                                        <th>سرپرست</th>
                                         <th>عملیات</th>
                                     </tr>
                                 </thead>
@@ -521,12 +171,8 @@
                                         <td>{{ personnel.personnelCode }}</td>
                                         <td>{{ personnel.name }} {{ personnel.family }}</td>
                                         <td>{{ personnel.position }}</td>
-                                        <td><span class="shift-badge" :class="'shift-' + personnel.shiftGroup.toLowerCase()">{{ personnel.shiftGroup }}</span></td>
-                                        <td>{{ personnel.isSupervisor === 'yes' ? 'بله' : 'خیر' }}</td>
                                         <td>
-                                            <button class="btn btn-danger btn-sm" @click="deletePersonnel(personnel.id)">
-                                                <i class="bi bi-trash-fill me-1"></i>حذف
-                                            </button>
+                                            <button class="btn btn-danger btn-sm" @click="deletePersonnel(personnel.id)">حذف</button>
                                         </td>
                                     </tr>
                                 </tbody>
@@ -542,12 +188,12 @@
                     <div class="card-header">ثبت حضور و غیاب شیفت</div>
                     <div class="card-body">
                         <div class="row mb-4">
-                            <div class="col-md-3">
-                                <label for="shiftDate" class="form-label">تاریخ (میلادی)</label>
+                            <div class="col-md-4">
+                                <label for="shiftDate" class="form-label">تاریخ</label>
                                 <input type="date" class="form-control" id="shiftDate" v-model="attendanceData.date" required>
-                                <div class="persian-date mt-2">{{ jalaliDate }} - {{ dayName }}</div>
+                                <div class="persian-date mt-2">{{ jalaliDate }}</div>
                             </div>
-                            <div class="col-md-3">
+                            <div class="col-md-4">
                                 <label for="shiftType" class="form-label">نوع شیفت</label>
                                 <select class="form-select" id="shiftType" v-model="attendanceData.shiftType" required>
                                     <option value="صبح (۶-۱۴)">صبح (۶-۱۴)</option>
@@ -555,19 +201,9 @@
                                     <option value="شب (۲۲-۶)">شب (۲۲-۶)</option>
                                 </select>
                             </div>
-                            <div class="col-md-3">
-                                <label for="shiftGroup" class="form-label">گروه شیفت</label>
-                                <select class="form-select" id="shiftGroup" v-model="attendanceData.shiftGroup" required>
-                                    <option value="A">شیفت A</option>
-                                    <option value="B">شیفت B</option>
-                                    <option value="C">شیفت C</option>
-                                </select>
-                            </div>
-                            <div class="col-md-3">
+                            <div class="col-md-4">
                                 <label for="supervisor" class="form-label">سرپرست شیفت</label>
-                                <select class="form-select" id="supervisor" v-model="attendanceData.supervisor" required>
-                                    <option v-for="supervisor in shiftSupervisors" :value="supervisor.id">{{ supervisor.name }} {{ supervisor.family }}</option>
-                                </select>
+                                <input type="text" class="form-control" id="supervisor" v-model="attendanceData.supervisor" required>
                             </div>
                         </div>
 
@@ -575,10 +211,10 @@
                             <div class="koor-header">{{ koor }}</div>
                             <div class="mb-3" v-for="position in positions" :key="position">
                                 <label class="form-label">{{ position }}</label>
-                                <div v-for="(attendance, index) in getAttendanceByPosition(position)" :key="index" class="p-3 border rounded attendance-item mb-2">
+                                <div v-for="(attendance, index) in getAttendanceByPosition(position)" :key="index" class="mb-2 p-2 border rounded">
                                     <div class="row align-items-center">
                                         <div class="col-md-4">
-                                            <select class="form-select" v-model="attendance.personnelId" @change="updateAttendancePersonnel(attendance, $event)">
+                                            <select class="form-select" v-model="attendance.personnelId">
                                                 <option value="">انتخاب پرسنل</option>
                                                 <option v-for="p in getPersonnelByPosition(position)" :value="p.id" :key="p.id">{{ p.name }} {{ p.family }} ({{ p.personnelCode }})</option>
                                             </select>
@@ -597,7 +233,7 @@
                                                 <label class="form-check-label">اضافه کار</label>
                                             </div>
                                             <div class="form-check form-check-inline">
-                                                <input class="form-check-input" type="checkbox" v-model="attendance.substitute" @change="toggleSubstitute(attendance)">
+                                                <input class="form-check-input" type="checkbox" v-model="attendance.substitute">
                                                 <label class="form-check-label">تعویض</label>
                                             </div>
                                             <div v-if="attendance.substitute" class="mt-2">
@@ -606,15 +242,11 @@
                                         </div>
                                     </div>
                                 </div>
-                                <button class="btn btn-sm btn-outline-primary mt-2 no-print" @click="addAnotherPersonnel(position)">
-                                    <i class="bi bi-plus-circle me-1"></i>افزودن پرسنل دیگر برای این پست
-                                </button>
+                                <button class="btn btn-sm btn-outline-primary mt-2" @click="addAnotherPersonnel(position)">+ افزودن پرسنل دیگر برای این پست</button>
                             </div>
                         </div>
 
-                        <button class="btn btn-success mt-4 no-print" @click="saveAttendance">
-                            <i class="bi bi-check-circle-fill me-2"></i>ذخیره اطلاعات حضور و غیاب
-                        </button>
+                        <button class="btn btn-success mt-4" @click="saveAttendance">ذخیره اطلاعات حضور و غیاب</button>
                     </div>
                 </div>
             </div>
@@ -624,14 +256,14 @@
                 <div class="card">
                     <div class="card-header">گزارشات حضور و غیاب</div>
                     <div class="card-body">
-                        <div class="row mb-4 no-print">
+                        <div class="row mb-4">
                             <div class="col-md-3">
-                                <label for="startDate" class="form-label">از تاریخ (میلادی)</label>
+                                <label for="startDate" class="form-label">از تاریخ</label>
                                 <input type="date" class="form-control" id="startDate" v-model="reportData.startDate">
                                 <div class="persian-date mt-2" v-if="reportData.startDate">{{ toJalali(reportData.startDate) }}</div>
                             </div>
                             <div class="col-md-3">
-                                <label for="endDate" class="form-label">تا تاریخ (میلادی)</label>
+                                <label for="endDate" class="form-label">تا تاریخ</label>
                                 <input type="date" class="form-control" id="endDate" v-model="reportData.endDate">
                                 <div class="persian-date mt-2" v-if="reportData.endDate">{{ toJalali(reportData.endDate) }}</div>
                             </div>
@@ -646,82 +278,59 @@
                             </div>
                             <div class="col-md-3">
                                 <label class="form-label d-block">&nbsp;</label>
-                                <button class="btn btn-primary" @click="generateReport">
-                                    <i class="bi bi-file-earmark-bar-graph me-2"></i>تولید گزارش
-                                </button>
-                                <button class="btn btn-success ms-2" @click="exportPDF" v-if="reportResults.length">
-                                    <i class="bi bi-file-earmark-pdf me-2"></i>خروجی PDF
-                                </button>
+                                <button class="btn btn-primary" @click="generateReport"> تولید گزارش</button>
                             </div>
                         </div>
 
-                        <div class="print-section" v-if="reportResults.length">
-                            <div class="report-header text-center mb-4">
-                                <h3>گزارش حضور و غیاب پرسنل</h3>
-                                <p class="persian-date">تاریخ گزارش: {{ currentJalaliDate }}</p>
-                                <p v-if="reportData.startDate || reportData.endDate">
-                                    بازه زمانی: 
-                                    {{ reportData.startDate ? toJalali(reportData.startDate) : 'شروع' }} 
-                                    تا 
-                                    {{ reportData.endDate ? toJalali(reportData.endDate) : 'پایان' }}
-                                </p>
-                                <p v-if="reportData.shiftType">شیفت: {{ reportData.shiftType }}</p>
-                            </div>
-                            <div class="table-responsive">
-                                <table class="table table-striped table-bordered">
-                                    <thead>
-                                        <tr>
-                                            <th>تاریخ (شمسی)</th>
-                                            <th>شیفت</th>
-                                            <th>پرسنل</th>
-                                            <th>پست سازمانی</th>
-                                            <th>وضعیت</th>
-                                            <th>اضافه کار</th>
-                                            <th>تعویض با</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr v-for="(item, index) in reportResults" :key="index">
-                                            <td>{{ toJalali(item.date) }}</td>
-                                            <td>{{ item.shiftType }}</td>
-                                            <td>{{ item.personnelName }}</td>
-                                            <td>{{ item.position }}</td>
-                                            <td>
-                                                <span class="status-badge" :class="{
-                                                    'bg-success': item.status === 'present',
-                                                    'bg-warning': item.status === 'leave'
-                                                }">
-                                                    {{ item.status === 'present' ? 'حاضر' : 'مرخصی' }}
-                                                </span>
-                                            </td>
-                                            <td>
-                                                <span class="badge bg-info" v-if="item.overtime">اضافه کار</span>
-                                                <span v-else>-</span>
-                                            </td>
-                                            <td>{{ item.substituteWith || '-' }}</td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
+                        <div class="table-responsive" v-if="reportResults.length">
+                            <table class="table table-striped table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th>تاریخ (شمسی)</th>
+                                        <th>شیفت</th>
+                                        <th>پرسنل</th>
+                                        <th>پست سازمانی</th>
+                                        <th>وضعیت</th>
+                                        <th>اضافه کار</th>
+                                        <th>تعویض با</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr v-for="(item, index) in reportResults" :key="index">
+                                        <td>{{ toJalali(item.date) }}</td>
+                                        <td>{{ item.shiftType }}</td>
+                                        <td>{{ item.personnelName }}</td>
+                                        <td>{{ item.position }}</td>
+                                        <td>
+                                            <span class="badge" :class="{
+                                                'bg-success': item.status === 'present',
+                                                'bg-warning': item.status === 'leave'
+                                            }">
+                                                {{ item.status === 'present' ? 'حاضر' : 'مرخصی' }}
+                                            </span>
+                                        </td>
+                                        <td>
+                                            <span class="badge bg-info" v-if="item.overtime">اضافه کار</span>
+                                            <span v-else>-</span>
+                                        </td>
+                                        <td>{{ item.substituteWith || '-' }}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
                         </div>
 
-                        <div v-else class="alert alert-info no-print">
-                            <i class="bi bi-info-circle me-2"></i> گزارشی برای نمایش وجود ندارد. لطفا فیلترهای مورد نظر خود را اعمال کنید.
+                        <div v-else class="alert alert-info">
+                            گزارشی برای نمایش وجود ندارد. لطفا فیلترهای مورد نظر خود را اعمال کنید.
                         </div>
                     </div>
                 </div>
-            </div>
-            
-            <!-- دکمه پرینت -->
-            <div class="print-btn no-print" @click="printPage" title="چاپ گزارش">
-                <i class="bi bi-printer-fill"></i>
             </div>
         </div>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/vue@3.2.45/dist/vue.global.js"></script>
     <script>
-        const { createApp, ref, reactive, computed, onMounted, watch } = Vue;
+        const { createApp, ref, reactive, computed, onMounted } = Vue;
         
         createApp({
             setup() {
@@ -743,16 +352,13 @@
                     name: '',
                     family: '',
                     personnelCode: '',
-                    position: '',
-                    shiftGroup: 'A',
-                    isSupervisor: 'no'
+                    position: ''
                 });
                 
                 // داده‌های حضور و غیاب
                 const attendanceData = reactive({
                     date: new Date().toISOString().split('T')[0],
                     shiftType: 'صبح (۶-۱۴)',
-                    shiftGroup: 'A',
                     supervisor: ''
                 });
                 
@@ -773,8 +379,7 @@
                         "ذوبکار کوره یک",
                         "متصدی ماشین خط یک",
                         "متصدی لهر خط یک",
-                        "متصدی برش و شیشه گیری خط یک",
-                        "سرپرست کوره یک"
+                        "متصدی برش و شیشه گیری خط یک"
                     ],
                     "کوره دو": [
                         "ذوبکار کوره دو",
@@ -783,15 +388,9 @@
                         "متصدی لهر خط دو",
                         "متصدی لهر خط سه",
                         "متصدی برش خط دو و سه",
-                        "شیشه گیری خط دو و سه",
-                        "سرپرست کوره دو"
+                        "شیشه گیری خط دو و سه"
                     ]
                 };
-                
-                // تمام پست‌ها در یک آرایه
-                const allPositions = computed(() => {
-                    return Object.values(koorPositions).flat();
-                });
                 
                 // تاریخ شمسی
                 const currentJalaliDate = computed(() => {
@@ -802,58 +401,19 @@
                     return toJalali(attendanceData.date);
                 });
                 
-                const currentDayName = computed(() => {
-                    return getDayName(new Date());
-                });
-                
-                const dayName = computed(() => {
-                    return getDayName(new Date(attendanceData.date));
-                });
-                
                 function toJalali(gregorianDate) {
                     if (!gregorianDate) return '';
                     const [year, month, day] = gregorianDate.split('-');
-                    const jDate = dayjs(`${year}-${month}-${day}`).calendar('jalali').locale('fa');
-                    return jDate.format('jYYYY/jMM/jDD');
-                }
-                
-                function getDayName(date) {
-                    const days = ['یکشنبه', 'دوشنبه', 'سه‌شنبه', 'چهارشنبه', 'پنجشنبه', 'جمعه', 'شنبه'];
-                    return days[date.getDay()];
-                }
-                
-                // سرپرستان شیفت
-                const shiftSupervisors = computed(() => {
-                    return personnels.value.filter(p => p.isSupervisor === 'yes' && p.shiftGroup === attendanceData.shiftGroup);
-                });
-                
-                // پرسنل حاضر
-                const presentPersonnel = computed(() => {
-                    const todayRecords = attendanceRecords.value.filter(record => 
-                        record.date === attendanceData.date && 
-                        record.shiftType === attendanceData.shiftType &&
-                        record.status === 'present'
-                    );
                     
-                    return todayRecords.map(record => {
-                        const personnel = personnels.value.find(p => p.id === record.personnelId);
-                        return personnel ? { ...personnel, ...record } : null;
-                    }).filter(Boolean);
-                });
-                
-                // آمار
-                const todayRecordsCount = computed(() => {
-                    const today = new Date().toISOString().split('T')[0];
-                    return attendanceRecords.value.filter(record => record.date === today).length;
-                });
-                
-                const presentCount = computed(() => {
-                    return attendanceRecords.value.filter(record => record.status === 'present').length;
-                });
-                
-                const leaveCount = computed(() => {
-                    return attendanceRecords.value.filter(record => record.status === 'leave').length;
-                });
+                    // تبدیل تاریخ میلادی به شمسی (ساده‌شده)
+                    // این یک تبدیل ساده است و برای دقت بیشتر باید از کتابخانه‌های تخصصی استفاده کرد
+                    const jd = parseInt((((parseInt(year) + 621) * 12 + parseInt(month)) * 30 + parseInt(day)) / 30.6);
+                    const jy = jd - 621;
+                    const jm = (jd - jy * 12) + 1;
+                    const jd2 = jd - (jy * 12 + jm) * 30;
+                    
+                    return `${jy}/${jm < 10 ? '0' + jm : jm}/${jd2 < 10 ? '0' + jd2 : jd2}`;
+                }
                 
                 // توابع مربوط به ورود و خروج
                 const login = () => {
@@ -893,9 +453,7 @@
                         name: newPersonnel.name,
                         family: newPersonnel.family,
                         personnelCode: newPersonnel.personnelCode,
-                        position: newPersonnel.position,
-                        shiftGroup: newPersonnel.shiftGroup,
-                        isSupervisor: newPersonnel.isSupervisor
+                        position: newPersonnel.position
                     });
                     
                     // ریست فرم
@@ -903,8 +461,6 @@
                     newPersonnel.family = '';
                     newPersonnel.personnelCode = '';
                     newPersonnel.position = '';
-                    newPersonnel.shiftGroup = 'A';
-                    newPersonnel.isSupervisor = 'no';
                     
                     saveToLocalStorage();
                 };
@@ -935,21 +491,6 @@
                         substitute: false,
                         substituteWith: ''
                     });
-                };
-                
-                const updateAttendancePersonnel = (attendance, event) => {
-                    const personnelId = event.target.value;
-                    const personnel = personnels.value.find(p => p.id === personnelId);
-                    
-                    if (personnel) {
-                        attendance.personnelName = `${personnel.name} ${personnel.family}`;
-                    }
-                };
-                
-                const toggleSubstitute = (attendance) => {
-                    if (!attendance.substitute) {
-                        attendance.substituteWith = '';
-                    }
                 };
                 
                 const saveAttendance = () => {
@@ -988,16 +529,6 @@
                     reportResults.value = results;
                 };
                 
-                const exportPDF = () => {
-                    // در اینجا کد تولید PDF قرار می‌گیرد
-                    alert('امکان خروجی PDF در نسخه نمایشی فعال نیست. در نسخه کامل پیاده‌سازی خواهد شد.');
-                };
-                
-                // چاپ صفحه
-                const printPage = () => {
-                    window.print();
-                };
-                
                 // توابع ذخیره و بازیابی از localStorage
                 const saveToLocalStorage = () => {
                     localStorage.setItem('personnels', JSON.stringify(personnels.value));
@@ -1019,16 +550,13 @@
                 
                 // مقداردهی اولیه
                 onMounted(() => {
-                    dayjs.locale('fa');
-                    
                     // ایجاد برخی داده‌های نمونه برای نمایش
                     if (localStorage.getItem('personnels') === null) {
                         personnels.value = [
-                            { id: '1', name: 'علی', family: 'رضایی', personnelCode: '1001', position: 'ذوبکار کوره یک', shiftGroup: 'A', isSupervisor: 'no' },
-                            { id: '2', name: 'محمد', family: 'محمدی', personnelCode: '1002', position: 'متصدی ماشین خط یک', shiftGroup: 'A', isSupervisor: 'no' },
-                            { id: '3', name: 'حسن', family: 'حسینی', personnelCode: '1003', position: 'ذوبکار کوره دو', shiftGroup: 'B', isSupervisor: 'yes' },
-                            { id: '4', name: 'رضا', family: 'کریمی', personnelCode: '1004', position: 'متصدی برش خط دو و سه', shiftGroup: 'C', isSupervisor: 'no' },
-                            { id: '5', name: 'امیر', family: 'جعفری', personnelCode: '1005', position: 'سرپرست کوره یک', shiftGroup: 'A', isSupervisor: 'yes' }
+                            { id: '1', name: 'علی', family: 'رضایی', personnelCode: '1001', position: 'ذوبکار کوره یک' },
+                            { id: '2', name: 'محمد', family: 'محمدی', personnelCode: '1002', position: 'متصدی ماشین خط یک' },
+                            { id: '3', name: 'حسن', family: 'حسینی', personnelCode: '1003', position: 'ذوبکار کوره دو' },
+                            { id: '4', name: 'رضا', family: 'کریمی', personnelCode: '1004', position: 'متصدی برش خط دو و سه' }
                         ];
                     }
                     
@@ -1041,20 +569,6 @@
                     sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
                     reportData.startDate = sevenDaysAgo.toISOString().split('T')[0];
                     reportData.endDate = new Date().toISOString().split('T')[0];
-                    
-                    // تنظیم سرپرست پیش‌فرض
-                    if (shiftSupervisors.value.length > 0) {
-                        attendanceData.supervisor = shiftSupervisors.value[0].id;
-                    }
-                });
-                
-                // واکنش به تغییر گروه شیفت
-                watch(() => attendanceData.shiftGroup, (newVal) => {
-                    if (shiftSupervisors.value.length > 0) {
-                        attendanceData.supervisor = shiftSupervisors.value[0].id;
-                    } else {
-                        attendanceData.supervisor = '';
-                    }
                 });
                 
                 return {
@@ -1068,16 +582,8 @@
                     reportData,
                     reportResults,
                     koorPositions,
-                    allPositions,
-                    shiftSupervisors,
-                    presentPersonnel,
                     currentJalaliDate,
                     jalaliDate,
-                    currentDayName,
-                    dayName,
-                    todayRecordsCount,
-                    presentCount,
-                    leaveCount,
                     login,
                     logout,
                     addPersonnel,
@@ -1085,12 +591,8 @@
                     getPersonnelByPosition,
                     getAttendanceByPosition,
                     addAnotherPersonnel,
-                    updateAttendancePersonnel,
-                    toggleSubstitute,
                     saveAttendance,
                     generateReport,
-                    exportPDF,
-                    printPage,
                     toJalali
                 };
             }
