@@ -121,6 +121,41 @@
             padding: 8px 12px;
             width: 100%;
         }
+        
+        .print-btn {
+            position: fixed;
+            bottom: 30px;
+            left: 30px;
+            z-index: 100;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            background: var(--primary-color);
+            color: white;
+            font-size: 24px;
+        }
+        
+        @media print {
+            body * {
+                visibility: hidden;
+            }
+            .tab-content.active, .tab-content.active * {
+                visibility: visible;
+            }
+            .tab-content.active {
+                position: absolute;
+                left: 0;
+                top: 0;
+                width: 100%;
+            }
+            .no-print {
+                display: none !important;
+            }
+        }
     </style>
 </head>
 <body>
@@ -156,11 +191,11 @@
             <div class="header text-center">
                 <h1>سیستم حضور و غیاب شیفت</h1>
                 <p>کاربر: {{ currentUser.name }} ({{ currentUser.role === 'admin' ? 'ادمین' : 'سرپرست شیفت' }})</p>
-                <button class="btn btn-light btn-sm" @click="logout">خروج</button>
+                <button class="btn btn-light btn-sm no-print" @click="logout">خروج</button>
             </div>
 
             <!-- تب‌ها -->
-            <ul class="nav nav-tabs mb-4" id="myTab" role="tablist">
+            <ul class="nav nav-tabs mb-4 no-print" id="myTab" role="tablist">
                 <li class="nav-item" role="presentation" v-if="currentUser.role === 'admin'">
                     <button class="nav-link" :class="{ active: activeTab === 'personnel' }" @click="activeTab = 'personnel'">مدیریت پرسنل</button>
                 </li>
@@ -251,7 +286,9 @@
                             </div>
                             <div class="col-md-4">
                                 <label for="supervisor" class="form-label">سرپرست شیفت</label>
-                                <input type="text" class="form-control" id="supervisor" v-model="attendanceData.supervisor" required>
+                                <select class="form-select" id="supervisor" v-model="attendanceData.supervisor" required>
+                                    <option v-for="supervisor in supervisors" :value="supervisor.id">{{ supervisor.name }} {{ supervisor.family }}</option>
+                                </select>
                             </div>
                         </div>
 
@@ -290,11 +327,11 @@
                                         </div>
                                     </div>
                                 </div>
-                                <button class="btn btn-sm btn-outline-primary mt-2" @click="addAnotherPersonnel(position)">+ افزودن پرسنل دیگر برای این پست</button>
+                                <button class="btn btn-sm btn-outline-primary mt-2 no-print" @click="addAnotherPersonnel(position)">+ افزودن پرسنل دیگر برای این پست</button>
                             </div>
                         </div>
 
-                        <button class="btn btn-success mt-4" @click="saveAttendance">ذخیره اطلاعات حضور و غیاب</button>
+                        <button class="btn btn-success mt-4 no-print" @click="saveAttendance">ذخیره اطلاعات حضور و غیاب</button>
                     </div>
                 </div>
             </div>
@@ -304,7 +341,7 @@
                 <div class="card">
                     <div class="card-header">گزارشات حضور و غیاب</div>
                     <div class="card-body">
-                        <div class="row mb-4">
+                        <div class="row mb-4 no-print">
                             <div class="col-md-3">
                                 <label for="startDate" class="form-label">از تاریخ (شمسی)</label>
                                 <input type="text" class="form-control date-picker" id="startDate" v-model="reportData.startDate">
@@ -366,11 +403,16 @@
                             </table>
                         </div>
 
-                        <div v-else class="alert alert-info">
+                        <div v-else class="alert alert-info no-print">
                             گزارشی برای نمایش وجود ندارد. لطفا فیلترهای مورد نظر خود را اعمال کنید.
                         </div>
                     </div>
                 </div>
+            </div>
+            
+            <!-- دکمه پرینت -->
+            <div class="print-btn no-print" @click="printPage" title="چاپ گزارش">
+                <i class="bi bi-printer-fill"></i>
             </div>
         </div>
     </div>
@@ -429,7 +471,8 @@
                         "ذوبکار کوره یک",
                         "متصدی ماشین خط یک",
                         "متصدی لهر خط یک",
-                        "متصدی برش و شیشه گیری خط یک"
+                        "متصدی برش و شیشه گیری خط یک",
+                        "سرپرست کوره یک"
                     ],
                     "کوره دو": [
                         "ذوبکار کوره دو",
@@ -438,9 +481,15 @@
                         "متصدی لهر خط دو",
                         "متصدی لهر خط سه",
                         "متصدی برش خط دو و سه",
-                        "شیشه گیری خط دو و سه"
+                        "شیشه گیری خط دو و سه",
+                        "سرپرست کوره دو"
                     ]
                 };
+                
+                // سرپرستان
+                const supervisors = computed(() => {
+                    return personnels.value.filter(p => p.position.includes('سرپرست'));
+                });
                 
                 // توابع مربوط به ورود و خروج
                 const login = () => {
@@ -489,12 +538,22 @@
                     reportData.startDate = sevenDaysAgo.format('YYYY/MM/DD');
                     reportData.endDate = todayFormatted;
                     
+                    // تنظیم سرپرست پیش‌فرض
+                    if (supervisors.value.length > 0) {
+                        attendanceData.supervisor = supervisors.value[0].id;
+                    }
+                    
                     // فعال‌سازی datepicker روی تمام فیلدهای با کلاس date-picker
                     $(".date-picker").persianDatepicker({
                         format: 'YYYY/MM/DD',
                         observer: true,
                         initialValue: false
                     });
+                };
+                
+                // چاپ صفحه
+                const printPage = () => {
+                    window.print();
                 };
                 
                 // توابع مدیریت پرسنل
@@ -619,7 +678,9 @@
                             { id: '1', name: 'علی', family: 'رضایی', personnelCode: '1001', position: 'ذوبکار کوره یک' },
                             { id: '2', name: 'محمد', family: 'محمدی', personnelCode: '1002', position: 'متصدی ماشین خط یک' },
                             { id: '3', name: 'حسن', family: 'حسینی', personnelCode: '1003', position: 'ذوبکار کوره دو' },
-                            { id: '4', name: 'رضا', family: 'کریمی', personnelCode: '1004', position: 'متصدی برش خط دو و سه' }
+                            { id: '4', name: 'رضا', family: 'کریمی', personnelCode: '1004', position: 'متصدی برش خط دو و سه' },
+                            { id: '5', name: 'امیر', family: 'جعفری', personnelCode: '1005', position: 'سرپرست کوره یک' },
+                            { id: '6', name: 'محمد', family: 'کریمی', personnelCode: '1006', position: 'سرپرست کوره دو' }
                         ];
                     }
                     
@@ -639,6 +700,7 @@
                     reportData,
                     reportResults,
                     koorPositions,
+                    supervisors,
                     login,
                     logout,
                     addPersonnel,
@@ -649,7 +711,8 @@
                     toggleSubstitute,
                     saveAttendance,
                     generateReport,
-                    exportPDF
+                    exportPDF,
+                    printPage
                 };
             }
         }).mount('#app');
