@@ -169,6 +169,10 @@
             border: 1px solid #ffeaa7;
         }
         
+        .add-personnel-btn {
+            margin-top: 10px;
+        }
+        
         @media print {
             body * {
                 visibility: hidden;
@@ -300,425 +304,434 @@
 
                         <div>
                             <div class="koor-header">کوره یک</div>
-                            <div class="mb-3">
+                            
+                            <!-- ذوبکار کوره یک -->
+                            <div class="mb-3 position-container" data-position="ذوبکار کوره یک">
                                 <label class="form-label">ذوبکار کوره یک</label>
-                                <div class="mb-2 p-3 border rounded attendance-item">
-                                    <div class="row align-items-center">
-                                        <div class="col-md-4">
-                                            <select class="form-select personnel-select">
-                                                <option value="">انتخاب پرسنل</option>
-                                                <option value="1" selected>علی رضایی (1001)</option>
-                                                <option value="2">محمد محمدی (1002)</option>
-                                                <option value="3">حسن حسینی (1003)</option>
-                                                <option value="4">رضا کریمی (1004)</option>
-                                                <option value="7">اکبر موسوی (1007)</option>
-                                                <option value="8">محمد رضایی (1008)</option>
-                                            </select>
-                                        </div>
-                                        <div class="col-md-8">
-                                            <div class="form-check form-check-inline">
-                                                <input class="form-check-input" type="radio" name="status_1" value="present" checked>
-                                                <label class="form-check-label">حاضر</label>
+                                <div class="position-personnel">
+                                    <div class="mb-2 p-3 border rounded attendance-item">
+                                        <div class="row align-items-center">
+                                            <div class="col-md-4">
+                                                <select class="form-select personnel-select">
+                                                    <option value="">انتخاب پرسنل</option>
+                                                    <option value="1" selected>علی رضایی (1001)</option>
+                                                    <option value="2">محمد محمدی (1002)</option>
+                                                    <option value="3">حسن حسینی (1003)</option>
+                                                </select>
                                             </div>
-                                            <div class="form-check form-check-inline">
-                                                <input class="form-check-input" type="radio" name="status_1" value="leave">
-                                                <label class="form-check-label">مرخصی</label>
-                                            </div>
-                                            
-                                            <!-- بخش اضافه کار -->
-                                            <div class="overtime-section mt-3">
-                                                <h6><i class="bi bi-clock-history"></i> اضافه کار</h6>
-                                                <div class="row">
-                                                    <div class="col-md-6">
-                                                        <div class="form-check">
-                                                            <input class="form-check-input" type="checkbox" id="overtime_need_1">
-                                                            <label class="form-check-label" for="overtime_need_1">نیاز قسمت</label>
+                                            <div class="col-md-8">
+                                                <div class="form-check form-check-inline">
+                                                    <input class="form-check-input" type="radio" name="status_1" value="present" checked>
+                                                    <label class="form-check-label">حاضر</label>
+                                                </div>
+                                                <div class="form-check form-check-inline">
+                                                    <input class="form-check-input" type="radio" name="status_1" value="leave">
+                                                    <label class="form-check-label">مرخصی</label>
+                                                </div>
+                                                
+                                                <!-- بخش اضافه کار -->
+                                                <div class="overtime-section mt-3">
+                                                    <h6><i class="bi bi-clock-history"></i> اضافه کار</h6>
+                                                    <div class="row">
+                                                        <div class="col-md-6">
+                                                            <div class="form-check">
+                                                                <input class="form-check-input" type="checkbox" id="overtime_need_1">
+                                                                <label class="form-check-label" for="overtime_need_1">نیاز قسمت</label>
+                                                            </div>
+                                                            <textarea class="form-control mt-2" rows="2" placeholder="توضیحات نیاز قسمت"></textarea>
                                                         </div>
-                                                        <textarea class="form-control mt-2" rows="2" placeholder="توضیحات نیاز قسمت"></textarea>
+                                                        <div class="col-md-6">
+                                                            <div class="form-check">
+                                                                <input class="form-check-input" type="checkbox" id="overtime_substitute_1">
+                                                                <label class="form-check-label" for="overtime_substitute_1">اضافه کار بجای همکار</label>
+                                                            </div>
+                                                            <select class="form-select mt-2">
+                                                                <option value="">انتخاب همکار</option>
+                                                                <option value="2">محمد محمدی (1002) - متصدی ماشین خط یک</option>
+                                                                <option value="3">حسن حسینی (1003) - ذوبکار کوره دو</option>
+                                                                <option value="4">رضا کریمی (1004) - متصدی برش خط دو و سه</option>
+                                                            </select>
+                                                        </div>
                                                     </div>
-                                                    <div class="col-md-6">
-                                                        <div class="form-check">
-                                                            <input class="form-check-input" type="checkbox" id="overtime_substitute_1">
-                                                            <label class="form-check-label" for="overtime_substitute_1">اضافه کار بجای همکار</label>
-                                                        </div>
-                                                        <select class="form-select mt-2">
-                                                            <option value="">انتخاب همکار</option>
-                                                            <option value="2">محمد محمدی (1002) - متصدی ماشین خط یک</option>
+                                                </div>
+                                                
+                                                <!-- بخش تعویض -->
+                                                <div class="substitute-section mt-3">
+                                                    <div class="form-check">
+                                                        <input class="form-check-input" type="checkbox" id="substitute_1" checked>
+                                                        <label class="form-check-label" for="substitute_1">تعویض</label>
+                                                    </div>
+                                                    <div class="mt-2">
+                                                        <label class="form-label">با چه کسی تعویض شده؟</label>
+                                                        <select class="form-select">
+                                                            <option value="">انتخاب پرسنل</option>
+                                                            <option value="2" selected>محمد محمدی (1002) - متصدی ماشین خط یک</option>
                                                             <option value="3">حسن حسینی (1003) - ذوبکار کوره دو</option>
                                                             <option value="4">رضا کریمی (1004) - متصدی برش خط دو و سه</option>
-                                                            <option value="7">اکبر موسوی (1007) - شیشه گیری خط دو و سه</option>
-                                                            <option value="8">محمد رضایی (1008) - متصدی لهر خط دو</option>
-                                                            <option value="9">حمید احمدی (1009) - متصدی ماشین خط سه</option>
-                                                            <option value="10">سعید نوروزی (1010) - متصدی لهر خط سه</option>
                                                         </select>
                                                     </div>
-                                                </div>
-                                            </div>
-                                            
-                                            <!-- بخش تعویض -->
-                                            <div class="substitute-section mt-3">
-                                                <div class="form-check">
-                                                    <input class="form-check-input" type="checkbox" id="substitute_1" checked>
-                                                    <label class="form-check-label" for="substitute_1">تعویض</label>
-                                                </div>
-                                                <div class="mt-2">
-                                                    <label class="form-label">با چه کسی تعویض شده؟</label>
-                                                    <select class="form-select">
-                                                        <option value="">انتخاب پرسنل</option>
-                                                        <option value="2" selected>محمد محمدی (1002) - متصدی ماشین خط یک</option>
-                                                        <option value="3">حسن حسینی (1003) - ذوبکار کوره دو</option>
-                                                        <option value="4">رضا کریمی (1004) - متصدی برش خط دو و سه</option>
-                                                        <option value="7">اکبر موسوی (1007) - شیشه گیری خط دو و سه</option>
-                                                        <option value="8">محمد رضایی (1008) - متصدی لهر خط دو</option>
-                                                        <option value="9">حمید احمدی (1009) - متصدی ماشین خط سه</option>
-                                                        <option value="10">سعید نوروزی (1010) - متصدی لهر خط سه</option>
-                                                        <option value="11">مهدی جمالی (1011) - متصدی برش و شیشه گیری خط یک</option>
-                                                        <option value="12">علیرضا محمودی (1012) - متصدی لهر خط یک</option>
-                                                    </select>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
+                                <button class="btn btn-sm btn-outline-primary add-personnel-btn">+ افزودن پرسنل دیگر برای این پست</button>
                             </div>
 
-                            <div class="mb-3">
+                            <!-- متصدی ماشین خط یک -->
+                            <div class="mb-3 position-container" data-position="متصدی ماشین خط یک">
                                 <label class="form-label">متصدی ماشین خط یک</label>
-                                <div class="mb-2 p-3 border rounded attendance-item">
-                                    <div class="row align-items-center">
-                                        <div class="col-md-4">
-                                            <select class="form-select personnel-select">
-                                                <option value="">انتخاب پرسنل</option>
-                                                <option value="1">علی رضایی (1001)</option>
-                                                <option value="2" selected>محمد محمدی (1002)</option>
-                                                <option value="3">حسن حسینی (1003)</option>
-                                                <option value="4">رضا کریمی (1004)</option>
-                                                <option value="11">مهدی جمالی (1011)</option>
-                                                <option value="12">علیرضا محمودی (1012)</option>
-                                            </select>
-                                        </div>
-                                        <div class="col-md-8">
-                                            <div class="form-check form-check-inline">
-                                                <input class="form-check-input" type="radio" name="status_2" value="present" checked>
-                                                <label class="form-check-label">حاضر</label>
+                                <div class="position-personnel">
+                                    <div class="mb-2 p-3 border rounded attendance-item">
+                                        <div class="row align-items-center">
+                                            <div class="col-md-4">
+                                                <select class="form-select personnel-select">
+                                                    <option value="">انتخاب پرسنل</option>
+                                                    <option value="1">علی رضایی (1001)</option>
+                                                    <option value="2" selected>محمد محمدی (1002)</option>
+                                                    <option value="3">حسن حسینی (1003)</option>
+                                                </select>
                                             </div>
-                                            <div class="form-check form-check-inline">
-                                                <input class="form-check-input" type="radio" name="status_2" value="leave">
-                                                <label class="form-check-label">مرخصی</label>
-                                            </div>
-                                            
-                                            <!-- بخش اضافه کار -->
-                                            <div class="overtime-section mt-3">
-                                                <h6><i class="bi bi-clock-history"></i> اضافه کار</h6>
-                                                <div class="row">
-                                                    <div class="col-md-6">
-                                                        <div class="form-check">
-                                                            <input class="form-check-input" type="checkbox" id="overtime_need_2">
-                                                            <label class="form-check-label" for="overtime_need_2">نیاز قسمت</label>
+                                            <div class="col-md-8">
+                                                <div class="form-check form-check-inline">
+                                                    <input class="form-check-input" type="radio" name="status_2" value="present" checked>
+                                                    <label class="form-check-label">حاضر</label>
+                                                </div>
+                                                <div class="form-check form-check-inline">
+                                                    <input class="form-check-input" type="radio" name="status_2" value="leave">
+                                                    <label class="form-check-label">مرخصی</label>
+                                                </div>
+                                                
+                                                <!-- بخش اضافه کار -->
+                                                <div class="overtime-section mt-3">
+                                                    <h6><i class="bi bi-clock-history"></i> اضافه کار</h6>
+                                                    <div class="row">
+                                                        <div class="col-md-6">
+                                                            <div class="form-check">
+                                                                <input class="form-check-input" type="checkbox" id="overtime_need_2">
+                                                                <label class="form-check-label" for="overtime_need_2">نیاز قسمت</label>
+                                                            </div>
+                                                            <textarea class="form-control mt-2" rows="2" placeholder="توضیحات نیاز قسمت"></textarea>
                                                         </div>
-                                                        <textarea class="form-control mt-2" rows="2" placeholder="توضیحات نیاز قسمت"></textarea>
+                                                        <div class="col-md-6">
+                                                            <div class="form-check">
+                                                                <input class="form-check-input" type="checkbox" id="overtime_substitute_2" checked>
+                                                                <label class="form-check-label" for="overtime_substitute_2">اضافه کار بجای همکار</label>
+                                                            </div>
+                                                            <select class="form-select mt-2">
+                                                                <option value="">انتخاب همکار</option>
+                                                                <option value="1">علی رضایی (1001) - ذوبکار کوره یک</option>
+                                                                <option value="3" selected>حسن حسینی (1003) - ذوبکار کوره دو</option>
+                                                                <option value="4">رضا کریمی (1004) - متصدی برش خط دو و سه</option>
+                                                            </select>
+                                                        </div>
                                                     </div>
-                                                    <div class="col-md-6">
-                                                        <div class="form-check">
-                                                            <input class="form-check-input" type="checkbox" id="overtime_substitute_2" checked>
-                                                            <label class="form-check-label" for="overtime_substitute_2">اضافه کار بجای همکار</label>
-                                                        </div>
-                                                        <select class="form-select mt-2">
-                                                            <option value="">انتخاب همکار</option>
+                                                </div>
+                                                
+                                                <!-- بخش تعویض -->
+                                                <div class="substitute-section mt-3">
+                                                    <div class="form-check">
+                                                        <input class="form-check-input" type="checkbox" id="substitute_2">
+                                                        <label class="form-check-label" for="substitute_2">تعویض</label>
+                                                    </div>
+                                                    <div class="mt-2" style="display: none;">
+                                                        <label class="form-label">با چه کسی تعویض شده؟</label>
+                                                        <select class="form-select">
+                                                            <option value="">انتخاب پرسنل</option>
                                                             <option value="1">علی رضایی (1001) - ذوبکار کوره یک</option>
-                                                            <option value="3" selected>حسن حسینی (1003) - ذوبکار کوره دو</option>
+                                                            <option value="3">حسن حسینی (1003) - ذوبکار کوره دو</option>
                                                             <option value="4">رضا کریمی (1004) - متصدی برش خط دو و سه</option>
-                                                            <option value="7">اکبر موسوی (1007) - شیشه گیری خط دو و سه</option>
-                                                            <option value="8">محمد رضایی (1008) - متصدی لهر خط دو</option>
-                                                            <option value="9">حمید احمدی (1009) - متصدی ماشین خط سه</option>
-                                                            <option value="10">سعید نوروزی (1010) - متصدی لهر خط سه</option>
                                                         </select>
                                                     </div>
-                                                </div>
-                                            </div>
-                                            
-                                            <!-- بخش تعویض -->
-                                            <div class="substitute-section mt-3">
-                                                <div class="form-check">
-                                                    <input class="form-check-input" type="checkbox" id="substitute_2">
-                                                    <label class="form-check-label" for="substitute_2">تعویض</label>
-                                                </div>
-                                                <div class="mt-2" style="display: none;">
-                                                    <label class="form-label">با چه کسی تعویض شده؟</label>
-                                                    <select class="form-select">
-                                                        <option value="">انتخاب پرسنل</option>
-                                                        <option value="1">علی رضایی (1001) - ذوبکار کوره یک</option>
-                                                        <option value="3">حسن حسینی (1003) - ذوبکار کوره دو</option>
-                                                        <option value="4">رضا کریمی (1004) - متصدی برش خط دو و سه</option>
-                                                        <option value="7">اکبر موسوی (1007) - شیشه گیری خط دو و سه</option>
-                                                        <option value="8">محمد رضایی (1008) - متصدی لهر خط دو</option>
-                                                        <option value="9">حمید احمدی (1009) - متصدی ماشین خط سه</option>
-                                                        <option value="10">سعید نوروزи (1010) - متصدی لهر خط سه</option>
-                                                        <option value="11">مهدی جمالی (1011) - متصدی برش و شیشه گیری خط یک</option>
-                                                        <option value="12">علیرضا محمودی (1012) - متصدی لهر خط یک</option>
-                                                    </select>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
+                                <button class="btn btn-sm btn-outline-primary add-personnel-btn">+ افزودن پرسنل دیگر برای این پست</button>
                             </div>
 
-                            <div class="mb-3">
+                            <!-- سایر پست‌های کوره یک -->
+                            <!-- متصدی لهر خط یک -->
+                            <div class="mb-3 position-container" data-position="متصدی لهر خط یک">
                                 <label class="form-label">متصدی لهر خط یک</label>
-                                <div class="mb-2 p-3 border rounded attendance-item">
-                                    <div class="row align-items-center">
-                                        <div class="col-md-4">
-                                            <select class="form-select personnel-select">
-                                                <option value="">انتخاب پرسنل</option>
-                                                <option value="12" selected>علیرضا محمودی (1012)</option>
-                                                <option value="13">مجید کرمانی (1013)</option>
-                                                <option value="14">رضا شیرازی (1014)</option>
-                                            </select>
-                                        </div>
-                                        <div class="col-md-8">
-                                            <div class="form-check form-check-inline">
-                                                <input class="form-check-input" type="radio" name="status_12" value="present" checked>
-                                                <label class="form-check-label">حاضر</label>
+                                <div class="position-personnel">
+                                    <div class="mb-2 p-3 border rounded attendance-item">
+                                        <div class="row align-items-center">
+                                            <div class="col-md-4">
+                                                <select class="form-select personnel-select">
+                                                    <option value="">انتخاب پرسنل</option>
+                                                    <option value="12" selected>علیرضا محمودی (1012)</option>
+                                                    <option value="13">مجید کرمانی (1013)</option>
+                                                    <option value="14">رضا شیرازی (1014)</option>
+                                                </select>
                                             </div>
-                                            <div class="form-check form-check-inline">
-                                                <input class="form-check-input" type="radio" name="status_12" value="leave">
-                                                <label class="form-check-label">مرخصی</label>
-                                            </div>
-                                            
-                                            <!-- بخش اضافه کار -->
-                                            <div class="overtime-section mt-3">
-                                                <h6><i class="bi bi-clock-history"></i> اضافه کار</h6>
-                                                <div class="row">
-                                                    <div class="col-md-6">
-                                                        <div class="form-check">
-                                                            <input class="form-check-input" type="checkbox" id="overtime_need_12">
-                                                            <label class="form-check-label" for="overtime_need_12">نیاز قسمت</label>
+                                            <div class="col-md-8">
+                                                <div class="form-check form-check-inline">
+                                                    <input class="form-check-input" type="radio" name="status_12" value="present" checked>
+                                                    <label class="form-check-label">حاضر</label>
+                                                </div>
+                                                <div class="form-check form-check-inline">
+                                                    <input class="form-check-input" type="radio" name="status_12" value="leave">
+                                                    <label class="form-check-label">مرخصی</label>
+                                                </div>
+                                                
+                                                <!-- بخش اضافه کار -->
+                                                <div class="overtime-section mt-3">
+                                                    <h6><i class="bi bi-clock-history"></i> اضافه کار</h6>
+                                                    <div class="row">
+                                                        <div class="col-md-6">
+                                                            <div class="form-check">
+                                                                <input class="form-check-input" type="checkbox" id="overtime_need_12">
+                                                                <label class="form-check-label" for="overtime_need_12">نیاز قسمت</label>
+                                                            </div>
+                                                            <textarea class="form-control mt-2" rows="2" placeholder="توضیحات نیاز قسمت"></textarea>
                                                         </div>
-                                                        <textarea class="form-control mt-2" rows="2" placeholder="توضیحات نیاز قسمت"></textarea>
+                                                        <div class="col-md-6">
+                                                            <div class="form-check">
+                                                                <input class="form-check-input" type="checkbox" id="overtime_substitute_12">
+                                                                <label class="form-check-label" for="overtime_substitute_12">اضافه کار بجای همکار</label>
+                                                            </div>
+                                                            <select class="form-select mt-2">
+                                                                <option value="">انتخاب همکار</option>
+                                                                <option value="1">علی رضایی (1001) - ذوبکار کوره یک</option>
+                                                                <option value="2">محمد محمدی (1002) - متصدی ماشین خط یک</option>
+                                                                <option value="3">حسن حسینی (1003) - ذوبکار کوره دو</option>
+                                                            </select>
+                                                        </div>
                                                     </div>
-                                                    <div class="col-md-6">
-                                                        <div class="form-check">
-                                                            <input class="form-check-input" type="checkbox" id="overtime_substitute_12">
-                                                            <label class="form-check-label" for="overtime_substitute_12">اضافه کار بجای همکار</label>
-                                                        </div>
-                                                        <select class="form-select mt-2">
-                                                            <option value="">انتخاب همکار</option>
+                                                </div>
+                                                
+                                                <!-- بخش تعویض -->
+                                                <div class="substitute-section mt-3">
+                                                    <div class="form-check">
+                                                        <input class="form-check-input" type="checkbox" id="substitute_12">
+                                                        <label class="form-check-label" for="substitute_12">تعویض</label>
+                                                    </div>
+                                                    <div class="mt-2" style="display: none;">
+                                                        <label class="form-label">با چه کسی تعویض شده؟</label>
+                                                        <select class="form-select">
+                                                            <option value="">انتخاب پرسنل</option>
                                                             <option value="1">علی رضایی (1001) - ذوبکار کوره یک</option>
                                                             <option value="2">محمد محمدی (1002) - متصدی ماشین خط یک</option>
                                                             <option value="3">حسن حسینی (1003) - ذوبکار کوره دو</option>
-                                                            <option value="8">محمد رضایی (1008) - متصدی لهر خط دو</option>
-                                                            <option value="10">سعید نوروزی (1010) - متصدی لهر خط سه</option>
-                                                            <option value="13">مجید کرمانی (1013) - متصدی لهر خط یک</option>
                                                         </select>
                                                     </div>
-                                                </div>
-                                            </div>
-                                            
-                                            <!-- بخش تعویض -->
-                                            <div class="substitute-section mt-3">
-                                                <div class="form-check">
-                                                    <input class="form-check-input" type="checkbox" id="substitute_12">
-                                                    <label class="form-check-label" for="substitute_12">تعویض</label>
-                                                </div>
-                                                <div class="mt-2" style="display: none;">
-                                                    <label class="form-label">با چه کسی تعویض شده؟</label>
-                                                    <select class="form-select">
-                                                        <option value="">انتخاب پرسنل</option>
-                                                        <option value="1">علی رضایی (1001) - ذوبکار کوره یک</option>
-                                                        <option value="2">محمد محمدی (1002) - متصدی ماشین خط یک</option>
-                                                        <option value="3">حسن حسینی (1003) - ذوبکار کوره دو</option>
-                                                        <option value="8">محمد رضایی (1008) - متصدی لهر خط دو</option>
-                                                        <option value="10">سعید نوروزی (1010) - متصدی لهر خط سه</option>
-                                                        <option value="13">مجید کرمانی (1013) - متصدی لهر خط یک</option>
-                                                    </select>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
+                                <button class="btn btn-sm btn-outline-primary add-personnel-btn">+ افزودن پرسنل دیگر برای این پست</button>
                             </div>
 
-                            <div class="mb-3">
+                            <!-- متصدی برش و شیشه گیری خط یک -->
+                            <div class="mb-3 position-container" data-position="متصدی برش و شیشه گیری خط یک">
                                 <label class="form-label">متصدی برش و شیشه گیری خط یک</label>
-                                <div class="mb-2 p-3 border rounded attendance-item">
-                                    <div class="row align-items-center">
-                                        <div class="col-md-4">
-                                            <select class="form-select personnel-select">
-                                                <option value="">انتخاب پرسنل</option>
-                                                <option value="11" selected>مهدی جمالی (1011)</option>
-                                                <option value="15">حسین تهرانی (1015)</option>
-                                                <option value="16">امید اصفهانی (1016)</option>
-                                            </select>
-                                        </div>
-                                        <div class="col-md-8">
-                                            <div class="form-check form-check-inline">
-                                                <input class="form-check-input" type="radio" name="status_11" value="present" checked>
-                                                <label class="form-check-label">حاضر</label>
+                                <div class="position-personnel">
+                                    <div class="mb-2 p-3 border rounded attendance-item">
+                                        <div class="row align-items-center">
+                                            <div class="col-md-4">
+                                                <select class="form-select personnel-select">
+                                                    <option value="">انتخاب پرسنل</option>
+                                                    <option value="11" selected>مهدی جمالی (1011)</option>
+                                                    <option value="15">حسین تهرانی (1015)</option>
+                                                    <option value="16">امید اصفهانی (1016)</option>
+                                                </select>
                                             </div>
-                                            <div class="form-check form-check-inline">
-                                                <input class="form-check-input" type="radio" name="status_11" value="leave">
-                                                <label class="form-check-label">مرخصی</label>
-                                            </div>
-                                            
-                                            <!-- بخش اضافه کار -->
-                                            <div class="overtime-section mt-3">
-                                                <h6><i class="bi bi-clock-history"></i> اضافه کار</h6>
-                                                <div class="row">
-                                                    <div class="col-md-6">
-                                                        <div class="form-check">
-                                                            <input class="form-check-input" type="checkbox" id="overtime_need_11">
-                                                            <label class="form-check-label" for="overtime_need_11">نیاز قسمت</label>
+                                            <div class="col-md-8">
+                                                <div class="form-check form-check-inline">
+                                                    <input class="form-check-input" type="radio" name="status_11" value="present" checked>
+                                                    <label class="form-check-label">حاضر</label>
+                                                </div>
+                                                <div class="form-check form-check-inline">
+                                                    <input class="form-check-input" type="radio" name="status_11" value="leave">
+                                                    <label class="form-check-label">مرخصی</label>
+                                                </div>
+                                                
+                                                <!-- بخش اضافه کار -->
+                                                <div class="overtime-section mt-3">
+                                                    <h6><i class="bi bi-clock-history"></i> اضافه کار</h6>
+                                                    <div class="row">
+                                                        <div class="col-md-6">
+                                                            <div class="form-check">
+                                                                <input class="form-check-input" type="checkbox" id="overtime_need_11">
+                                                                <label class="form-check-label" for="overtime_need_11">نیاز قسمت</label>
+                                                            </div>
+                                                            <textarea class="form-control mt-2" rows="2" placeholder="توضیحات نیاز قسمت"></textarea>
                                                         </div>
-                                                        <textarea class="form-control mt-2" rows="2" placeholder="توضیحات نیاز قسمت"></textarea>
+                                                        <div class="col-md-6">
+                                                            <div class="form-check">
+                                                                <input class="form-check-input" type="checkbox" id="overtime_substitute_11">
+                                                                <label class="form-check-label" for="overtime_substitute_11">اضافه کار بجای همکار</label>
+                                                            </div>
+                                                            <select class="form-select mt-2">
+                                                                <option value="">انتخاب همکار</option>
+                                                                <option value="4">رضا کریمی (1004) - متصدی برش خط دو و سه</option>
+                                                                <option value="7">اکبر موسوی (1007) - شیشه گیری خط دو و سه</option>
+                                                                <option value="15">حسین تهرانی (1015) - متصدی برش و شیشه گیری خط یک</option>
+                                                            </select>
+                                                        </div>
                                                     </div>
-                                                    <div class="col-md-6">
-                                                        <div class="form-check">
-                                                            <input class="form-check-input" type="checkbox" id="overtime_substitute_11">
-                                                            <label class="form-check-label" for="overtime_substitute_11">اضافه کار بجای همکار</label>
-                                                        </div>
-                                                        <select class="form-select mt-2">
-                                                            <option value="">انتخاب همکار</option>
+                                                </div>
+                                                
+                                                <!-- بخش تعویض -->
+                                                <div class="substitute-section mt-3">
+                                                    <div class="form-check">
+                                                        <input class="form-check-input" type="checkbox" id="substitute_11">
+                                                        <label class="form-check-label" for="substitute_11">تعویض</label>
+                                                    </div>
+                                                    <div class="mt-2" style="display: none;">
+                                                        <label class="form-label">با چه کسی تعویض شده؟</label>
+                                                        <select class="form-select">
+                                                            <option value="">انتخاب پرسنل</option>
                                                             <option value="4">رضا کریمی (1004) - متصدی برش خط دو و سه</option>
                                                             <option value="7">اکبر موسوی (1007) - شیشه گیری خط دو و سه</option>
                                                             <option value="15">حسین تهرانی (1015) - متصدی برش و شیشه گیری خط یک</option>
-                                                            <option value="16">امید اصفهانی (1016) - متصدی برش و شیشه گیری خط یک</option>
                                                         </select>
                                                     </div>
-                                                </div>
-                                            </div>
-                                            
-                                            <!-- بخش تعویض -->
-                                            <div class="substitute-section mt-3">
-                                                <div class="form-check">
-                                                    <input class="form-check-input" type="checkbox" id="substitute_11">
-                                                    <label class="form-check-label" for="substitute_11">تعویض</label>
-                                                </div>
-                                                <div class="mt-2" style="display: none;">
-                                                    <label class="form-label">با چه کسی تعویض شده؟</label>
-                                                    <select class="form-select">
-                                                        <option value="">انتخاب پرسنل</option>
-                                                        <option value="4">رضا کریمی (1004) - متصدی برش خط دو و سه</option>
-                                                        <option value="7">اکبر موسوی (1007) - شیشه گیری خط دو و سه</option>
-                                                        <option value="15">حسین تهرانی (1015) - متصدی برش و شیشه گیری خط یک</option>
-                                                        <option value="16">امید اصفهانی (1016) - متصدی برش و شیشه گیری خط یک</option>
-                                                    </select>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
+                                <button class="btn btn-sm btn-outline-primary add-personnel-btn">+ افزودن پرسنل دیگر برای این پست</button>
                             </div>
 
-                            <div class="mb-3">
+                            <!-- سرپرست کوره یک -->
+                            <div class="mb-3 position-container" data-position="سرپرست کوره یک">
                                 <label class="form-label">سرپرست کوره یک</label>
-                                <div class="mb-2 p-3 border rounded attendance-item">
-                                    <div class="row align-items-center">
-                                        <div class="col-md-4">
-                                            <select class="form-select personnel-select">
-                                                <option value="">انتخاب پرسنل</option>
-                                                <option value="5" selected>امیر جعفری (1005)</option>
-                                                <option value="17">حمیدرضا حسنی (1017)</option>
-                                            </select>
-                                        </div>
-                                        <div class="col-md-8">
-                                            <div class="form-check form-check-inline">
-                                                <input class="form-check-input" type="radio" name="status_5" value="present" checked>
-                                                <label class="form-check-label">حاضر</label>
+                                <div class="position-personnel">
+                                    <div class="mb-2 p-3 border rounded attendance-item">
+                                        <div class="row align-items-center">
+                                            <div class="col-md-4">
+                                                <select class="form-select personnel-select">
+                                                    <option value="">انتخاب پرسنل</option>
+                                                    <option value="5" selected>امیر جعفری (1005)</option>
+                                                    <option value="17">حمیدرضا حسنی (1017)</option>
+                                                </select>
                                             </div>
-                                            <div class="form-check form-check-inline">
-                                                <input class="form-check-input" type="radio" name="status_5" value="leave">
-                                                <label class="form-check-label">مرخصی</label>
-                                            </div>
-                                            
-                                            <!-- بخش اضافه کار -->
-                                            <div class="overtime-section mt-3">
-                                                <h6><i class="bi bi-clock-history"></i> اضافه کار</h6>
-                                                <div class="row">
-                                                    <div class="col-md-6">
-                                                        <div class="form-check">
-                                                            <input class="form-check-input" type="checkbox" id="overtime_need_5">
-                                                            <label class="form-check-label" for="overtime_need_5">نیاز قسمت</label>
+                                            <div class="col-md-8">
+                                                <div class="form-check form-check-inline">
+                                                    <input class="form-check-input" type="radio" name="status_5" value="present" checked>
+                                                    <label class="form-check-label">حاضر</label>
+                                                </div>
+                                                <div class="form-check form-check-inline">
+                                                    <input class="form-check-input" type="radio" name="status_5" value="leave">
+                                                    <label class="form-check-label">مرخصی</label>
+                                                </div>
+                                                
+                                                <!-- بخش اضافه کار -->
+                                                <div class="overtime-section mt-3">
+                                                    <h6><i class="bi bi-clock-history"></i> اضافه کار</h6>
+                                                    <div class="row">
+                                                        <div class="col-md-6">
+                                                            <div class="form-check">
+                                                                <input class="form-check-input" type="checkbox" id="overtime_need_5">
+                                                                <label class="form-check-label" for="overtime_need_5">نیاز قسمت</label>
+                                                            </div>
+                                                            <textarea class="form-control mt-2" rows="2" placeholder="توضیحات نیاز قسمت"></textarea>
                                                         </div>
-                                                        <textarea class="form-control mt-2" rows="2" placeholder="توضیحات نیاز قسمت"></textarea>
+                                                        <div class="col-md-6">
+                                                            <div class="form-check">
+                                                                <input class="form-check-input" type="checkbox" id="overtime_substitute_5">
+                                                                <label class="form-check-label" for="overtime_substitute_5">اضافه کار بجای همکار</label>
+                                                            </div>
+                                                            <select class="form-select mt-2">
+                                                                <option value="">انتخاب همکار</option>
+                                                                <option value="6">محمد کریمی (1006) - سرپرست کوره دو</option>
+                                                                <option value="17">حمیدرضا حسنی (1017) - سرپرست کوره یک</option>
+                                                            </select>
+                                                        </div>
                                                     </div>
-                                                    <div class="col-md-6">
-                                                        <div class="form-check">
-                                                            <input class="form-check-input" type="checkbox" id="overtime_substitute_5">
-                                                            <label class="form-check-label" for="overtime_substitute_5">اضافه کار بجای همکار</label>
-                                                        </div>
-                                                        <select class="form-select mt-2">
-                                                            <option value="">انتخاب همکار</option>
+                                                </div>
+                                                
+                                                <!-- بخش تعویض -->
+                                                <div class="substitute-section mt-3">
+                                                    <div class="form-check">
+                                                        <input class="form-check-input" type="checkbox" id="substitute_5">
+                                                        <label class="form-check-label" for="substitute_5">تعویض</label>
+                                                    </div>
+                                                    <div class="mt-2" style="display: none;">
+                                                        <label class="form-label">با چه کسی تعویض شده؟</label>
+                                                        <select class="form-select">
+                                                            <option value="">انتخاب پرسنل</option>
                                                             <option value="6">محمد کریمی (1006) - سرپرست کوره دو</option>
                                                             <option value="17">حمیدرضا حسنی (1017) - سرپرست کوره یک</option>
                                                         </select>
                                                     </div>
                                                 </div>
                                             </div>
-                                            
-                                            <!-- بخش تعویض -->
-                                            <div class="substitute-section mt-3">
-                                                <div class="form-check">
-                                                    <input class="form-check-input" type="checkbox" id="substitute_5">
-                                                    <label class="form-check-label" for="substitute_5">تعویض</label>
-                                                </div>
-                                                <div class="mt-2" style="display: none;">
-                                                    <label class="form-label">با چه کسی تعویض شده؟</label>
-                                                    <select class="form-select">
-                                                        <option value="">انتخاب پرسنل</option>
-                                                        <option value="6">محمد کریمی (1006) - سرپرست کوره دو</option>
-                                                        <option value="17">حمیدرضa حسنی (1017) - سرپرست کوره یک</option>
-                                                    </select>
-                                                </div>
-                                            </div>
                                         </div>
                                     </div>
                                 </div>
+                                <button class="btn btn-sm btn-outline-primary add-personnel-btn">+ افزودن پرسنل دیگر برای این پست</button>
                             </div>
                         </div>
 
                         <div>
                             <div class="koor-header">کوره دو</div>
-                            <div class="mb-3">
+                            
+                            <!-- ذوبکار کوره دو -->
+                            <div class="mb-3 position-container" data-position="ذوبکار کوره دو">
                                 <label class="form-label">ذوبکار کوره دو</label>
-                                <div class="mb-2 p-3 border rounded attendance-item">
-                                    <div class="row align-items-center">
-                                        <div class="col-md-4">
-                                            <select class="form-select personnel-select">
-                                                <option value="">انتخاب پرسنل</option>
-                                                <option value="3" selected>حسن حسینی (1003)</option>
-                                                <option value="18">محسن امینی (1018)</option>
-                                                <option value="19">فرهاد مقبلی (1019)</option>
-                                            </select>
-                                        </div>
-                                        <div class="col-md-8">
-                                            <div class="form-check form-check-inline">
-                                                <input class="form-check-input" type="radio" name="status_3" value="present" checked>
-                                                <label class="form-check-label">حاضر</label>
+                                <div class="position-personnel">
+                                    <div class="mb-2 p-3 border rounded attendance-item">
+                                        <div class="row align-items-center">
+                                            <div class="col-md-4">
+                                                <select class="form-select personnel-select">
+                                                    <option value="">انتخاب پرسنل</option>
+                                                    <option value="3" selected>حسن حسینی (1003)</option>
+                                                    <option value="18">محسن امینی (1018)</option>
+                                                    <option value="19">فرهاد مقبلی (1019)</option>
+                                                </select>
                                             </div>
-                                            <div class="form-check form-check-inline">
-                                                <input class="form-check-input" type="radio" name="status_3" value="leave">
-                                                <label class="form-check-label">مرخصی</label>
-                                            </div>
-                                            
-                                            <!-- بخش اضافه کار -->
-                                            <div class="overtime-section mt-3">
-                                                <h6><i class="bi bi-clock-history"></i> اضافه کار</h6>
-                                                <div class="row">
-                                                    <div class="col-md-6">
-                                                        <div class="form-check">
-                                                            <input class="form-check-input" type="checkbox" id="overtime_need_3" checked>
-                                                            <label class="form-check-label" for="overtime_need_3">نیاز قسمت</label>
+                                            <div class="col-md-8">
+                                                <div class="form-check form-check-inline">
+                                                    <input class="form-check-input" type="radio" name="status_3" value="present" checked>
+                                                    <label class="form-check-label">حاضر</label>
+                                                </div>
+                                                <div class="form-check form-check-inline">
+                                                    <input class="form-check-input" type="radio" name="status_3" value="leave">
+                                                    <label class="form-check-label">مرخصی</label>
+                                                </div>
+                                                
+                                                <!-- بخش اضافه کار -->
+                                                <div class="overtime-section mt-3">
+                                                    <h6><i class="bi bi-clock-history"></i> اضافه کار</h6>
+                                                    <div class="row">
+                                                        <div class="col-md-6">
+                                                            <div class="form-check">
+                                                                <input class="form-check-input" type="checkbox" id="overtime_need_3" checked>
+                                                                <label class="form-check-label" for="overtime_need_3">نیاز قسمت</label>
+                                                            </div>
+                                                            <textarea class="form-control mt-2" rows="2" placeholder="توضیحات نیاز قسمت">نیاز به تولید بیشتر در شیفت</textarea>
                                                         </div>
-                                                        <textarea class="form-control mt-2" rows="2" placeholder="توضیحات نیاز قسمت">نیاز به تولید بیشتر در شیفت</textarea>
+                                                        <div class="col-md-6">
+                                                            <div class="form-check">
+                                                                <input class="form-check-input" type="checkbox" id="overtime_substitute_3">
+                                                                <label class="form-check-label" for="overtime_substitute_3">اضافه کار بجای همکار</label>
+                                                            </div>
+                                                            <select class="form-select mt-2">
+                                                                <option value="">انتخاب همکار</option>
+                                                                <option value="1">علی رضایی (1001) - ذوبکار کوره یک</option>
+                                                                <option value="18">محسن امینی (1018) - ذوبکار کوره دو</option>
+                                                                <option value="19">فرهاد مقبلی (1019) - ذوبکار کوره دو</option>
+                                                            </select>
+                                                        </div>
                                                     </div>
-                                                    <div class="col-md-6">
-                                                        <div class="form-check">
-                                                            <input class="form-check-input" type="checkbox" id="overtime_substitute_3">
-                                                            <label class="form-check-label" for="overtime_substitute_3">اضافه کار بجای همکار</label>
-                                                        </div>
-                                                        <select class="form-select mt-2">
-                                                            <option value="">انتخاب همکار</option>
+                                                </div>
+                                                
+                                                <!-- بخش تعویض -->
+                                                <div class="substitute-section mt-3">
+                                                    <div class="form-check">
+                                                        <input class="form-check-input" type="checkbox" id="substitute_3">
+                                                        <label class="form-check-label" for="substitute_3">تعویض</label>
+                                                    </div>
+                                                    <div class="mt-2" style="display: none;">
+                                                        <label class="form-label">با چه کسی تعویض شده؟</label>
+                                                        <select class="form-select">
+                                                            <option value="">انتخاب پرسنل</option>
                                                             <option value="1">علی رضایی (1001) - ذوبکار کوره یک</option>
                                                             <option value="18">محسن امینی (1018) - ذوبکار کوره دو</option>
                                                             <option value="19">فرهاد مقبلی (1019) - ذوبکار کوره دو</option>
@@ -726,30 +739,519 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                            
-                                            <!-- بخش تعویض -->
-                                            <div class="substitute-section mt-3">
-                                                <div class="form-check">
-                                                    <input class="form-check-input" type="checkbox" id="substitute_3">
-                                                    <label class="form-check-label" for="substitute_3">تعویض</label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <button class="btn btn-sm btn-outline-primary add-personnel-btn">+ افزودن پرسنل دیگر برای این پست</button>
+                            </div>
+
+                            <!-- متصدی ماشین خط دو -->
+                            <div class="mb-3 position-container" data-position="متصدی ماشین خط دو">
+                                <label class="form-label">متصدی ماشین خط دو</label>
+                                <div class="position-personnel">
+                                    <div class="mb-2 p-3 border rounded attendance-item">
+                                        <div class="row align-items-center">
+                                            <div class="col-md-4">
+                                                <select class="form-select personnel-select">
+                                                    <option value="">انتخاب پرسنل</option>
+                                                    <option value="20" selected>رضا محمدی (1020)</option>
+                                                    <option value="21">سعید احمدی (1021)</option>
+                                                    <option value="22">مجتبی رضایی (1022)</option>
+                                                </select>
+                                            </div>
+                                            <div class="col-md-8">
+                                                <div class="form-check form-check-inline">
+                                                    <input class="form-check-input" type="radio" name="status_20" value="present" checked>
+                                                    <label class="form-check-label">حاضر</label>
                                                 </div>
-                                                <div class="mt-2" style="display: none;">
-                                                    <label class="form-label">با چه کسی تعویض شده؟</label>
-                                                    <select class="form-select">
-                                                        <option value="">انتخاب پرسنل</option>
-                                                        <option value="1">علی رضایی (1001) - ذوبکار کوره یک</option>
-                                                        <option value="18">محسن امینی (1018) - ذوبکار کوره دو</option>
-                                                        <option value="19">فرهاد مقبلی (1019) - ذوبکار کوره دو</option>
-                                                    </select>
+                                                <div class="form-check form-check-inline">
+                                                    <input class="form-check-input" type="radio" name="status_20" value="leave">
+                                                    <label class="form-check-label">مرخصی</label>
+                                                </div>
+                                                
+                                                <!-- بخش اضافه کار -->
+                                                <div class="overtime-section mt-3">
+                                                    <h6><i class="bi bi-clock-history"></i> اضافه کار</h6>
+                                                    <div class="row">
+                                                        <div class="col-md-6">
+                                                            <div class="form-check">
+                                                                <input class="form-check-input" type="checkbox" id="overtime_need_20">
+                                                                <label class="form-check-label" for="overtime_need_20">نیاز قسمت</label>
+                                                            </div>
+                                                            <textarea class="form-control mt-2" rows="2" placeholder="توضیحات نیاز قسمت"></textarea>
+                                                        </div>
+                                                        <div class="col-md-6">
+                                                            <div class="form-check">
+                                                                <input class="form-check-input" type="checkbox" id="overtime_substitute_20">
+                                                                <label class="form-check-label" for="overtime_substitute_20">اضافه کار بجای همکار</label>
+                                                            </div>
+                                                            <select class="form-select mt-2">
+                                                                <option value="">انتخاب همکار</option>
+                                                                <option value="2">محمد محمدی (1002) - متصدی ماشین خط یک</option>
+                                                                <option value="9">حمید احمدی (1009) - متصدی ماشین خط سه</option>
+                                                                <option value="21">سعید احمدی (1021) - متصدی ماشین خط دو</option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                
+                                                <!-- بخش تعویض -->
+                                                <div class="substitute-section mt-3">
+                                                    <div class="form-check">
+                                                        <input class="form-check-input" type="checkbox" id="substitute_20">
+                                                        <label class="form-check-label" for="substitute_20">تعویض</label>
+                                                    </div>
+                                                    <div class="mt-2" style="display: none;">
+                                                        <label class="form-label">با چه کسی تعویض شده؟</label>
+                                                        <select class="form-select">
+                                                            <option value="">انتخاب پرسنل</option>
+                                                            <option value="2">محمد محمدی (1002) - متصدی ماشین خط یک</option>
+                                                            <option value="9">حمید احمدی (1009) - متصدی mاشین خط سه</option>
+                                                            <option value="21">سعید احمدی (1021) - متصدی ماشین خط دو</option>
+                                                        </select>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
+                                <button class="btn btn-sm btn-outline-primary add-personnel-btn">+ افزودن پرسنل دیگر برای این پست</button>
                             </div>
 
-                            <!-- سایر پست‌های کوره دو به صورت مشابه اضافه شوند -->
-                            
+                            <!-- متصدی ماشین خط سه -->
+                            <div class="mb-3 position-container" data-position="متصدی ماشین خط سه">
+                                <label class="form-label">متصدی ماشین خط سه</label>
+                                <div class="position-personnel">
+                                    <div class="mb-2 p-3 border rounded attendance-item">
+                                        <div class="row align-items-center">
+                                            <div class="col-md-4">
+                                                <select class="form-select personnel-select">
+                                                    <option value="">انتخاب پرسنل</option>
+                                                    <option value="9" selected>حمید احمدی (1009)</option>
+                                                    <option value="23">مهدی کریمی (1023)</option>
+                                                    <option value="24">علیرضا محمودی (1024)</option>
+                                                </select>
+                                            </div>
+                                            <div class="col-md-8">
+                                                <div class="form-check form-check-inline">
+                                                    <input class="form-check-input" type="radio" name="status_9" value="present" checked>
+                                                    <label class="form-check-label">حاضر</label>
+                                                </div>
+                                                <div class="form-check form-check-inline">
+                                                    <input class="form-check-input" type="radio" name="status_9" value="leave">
+                                                    <label class="form-check-label">مرخصی</label>
+                                                </div>
+                                                
+                                                <!-- بخش اضافه کار -->
+                                                <div class="overtime-section mt-3">
+                                                    <h6><i class="bi bi-clock-history"></i> اضافه کار</h6>
+                                                    <div class="row">
+                                                        <div class="col-md-6">
+                                                            <div class="form-check">
+                                                                <input class="form-check-input" type="checkbox" id="overtime_need_9">
+                                                                <label class="form-check-label" for="overtime_need_9">نیاز قسمت</label>
+                                                            </div>
+                                                            <textarea class="form-control mt-2" rows="2" placeholder="توضیحات نیاز قسمت"></textarea>
+                                                        </div>
+                                                        <div class="col-md-6">
+                                                            <div class="form-check">
+                                                                <input class="form-check-input" type="checkbox" id="overtime_substitute_9">
+                                                                <label class="form-check-label" for="overtime_substitute_9">اضافه کار بجای همکار</label>
+                                                            </div>
+                                                            <select class="form-select mt-2">
+                                                                <option value="">انتخاب همکار</option>
+                                                                <option value="2">محمد محمدی (1002) - متصدی ماشین خط یک</option>
+                                                                <option value="20">رضا محمدی (1020) - متصدی ماشین خط دو</option>
+                                                                <option value="23">مهدی کریمی (1023) - متصدی ماشین خط سه</option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                
+                                                <!-- بخش تعویض -->
+                                                <div class="substitute-section mt-3">
+                                                    <div class="form-check">
+                                                        <input class="form-check-input" type="checkbox" id="substitute_9">
+                                                        <label class="form-check-label" for="substitute_9">تعویض</label>
+                                                    </div>
+                                                    <div class="mt-2" style="display: none;">
+                                                        <label class="form-label">با چه کسی تعویض شده؟</label>
+                                                        <select class="form-select">
+                                                            <option value="">انتخاب پرسنل</option>
+                                                            <option value="2">محمد محمدی (1002) - متصدی ماشین خط یک</option>
+                                                            <option value="20">رضا محمدی (1020) - متصدی ماشین خط دو</option>
+                                                            <option value="23">mهدی کریمی (1023) - متصدی ماشین خط سه</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <button class="btn btn-sm btn-outline-primary add-personnel-btn">+ افزودن پرسنل دیگر برای این پست</button>
+                            </div>
+
+                            <!-- متصدی لهر خط دو -->
+                            <div class="mb-3 position-container" data-position="متصدی لهر خط دو">
+                                <label class="form-label">متصدی لهر خط دو</label>
+                                <div class="position-personnel">
+                                    <div class="mb-2 p-3 border rounded attendance-item">
+                                        <div class="row align-items-center">
+                                            <div class="col-md-4">
+                                                <select class="form-select personnel-select">
+                                                    <option value="">انتخاب پرسنل</option>
+                                                    <option value="8" selected>محمد رضایی (1008)</option>
+                                                    <option value="25">حسین موسوی (1025)</option>
+                                                    <option value="26">امیرحسین نجفی (1026)</option>
+                                                </select>
+                                            </div>
+                                            <div class="col-md-8">
+                                                <div class="form-check form-check-inline">
+                                                    <input class="form-check-input" type="radio" name="status_8" value="present" checked>
+                                                    <label class="form-check-label">حاضر</label>
+                                                </div>
+                                                <div class="form-check form-check-inline">
+                                                    <input class="form-check-input" type="radio" name="status_8" value="leave">
+                                                    <label class="form-check-label">مرخصی</label>
+                                                </div>
+                                                
+                                                <!-- بخش اضافه کار -->
+                                                <div class="overtime-section mt-3">
+                                                    <h6><i class="bi bi-clock-history"></i> اضافه کار</h6>
+                                                    <div class="row">
+                                                        <div class="col-md-6">
+                                                            <div class="form-check">
+                                                                <input class="form-check-input" type="checkbox" id="overtime_need_8">
+                                                                <label class="form-check-label" for="overtime_need_8">نیاز قسمت</label>
+                                                            </div>
+                                                            <textarea class="form-control mt-2" rows="2" placeholder="توضیحات نیاز قسمت"></textarea>
+                                                        </div>
+                                                        <div class="col-md-6">
+                                                            <div class="form-check">
+                                                                <input class="form-check-input" type="checkbox" id="overtime_substitute_8">
+                                                                <label class="form-check-label" for="overtime_substitute_8">اضافه کار بجای همکار</label>
+                                                            </div>
+                                                            <select class="form-select mt-2">
+                                                                <option value="">انتخاب همکار</option>
+                                                                <option value="12">علیرضا محمودی (1012) - متصدی لهر خط یک</option>
+                                                                <option value="10">سعید نوروزی (1010) - متصدی لهر خط سه</option>
+                                                                <option value="25">حسین موسوی (1025) - متصدی لهر خط دو</option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                
+                                                <!-- بخش تعویض -->
+                                                <div class="substitute-section mt-3">
+                                                    <div class="form-check">
+                                                        <input class="form-check-input" type="checkbox" id="substitute_8">
+                                                        <label class="form-check-label" for="substitute_8">تعویض</label>
+                                                    </div>
+                                                    <div class="mt-2" style="display: none;">
+                                                        <label class="form-label">با چه کسی تعویض شده؟</label>
+                                                        <select class="form-select">
+                                                            <option value="">انتخاب پرسنل</option>
+                                                            <option value="12">علیرضا محمودی (1012) - متصدی لهر خط یک</option>
+                                                            <option value="10">سعید نوروزی (1010) - متصدی لهر خط سه</option>
+                                                            <option value="25">حسین موسوی (1025) - متصدی لهر خط دو</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <button class="btn btn-sm btn-outline-primary add-personnel-btn">+ افزودن پرسنل دیگر برای این پست</button>
+                            </div>
+
+                            <!-- متصدی لهر خط سه -->
+                            <div class="mb-3 position-container" data-position="متصدی لهر خط سه">
+                                <label class="form-label">متصدی لهر خط سه</label>
+                                <div class="position-personnel">
+                                    <div class="mb-2 p-3 border rounded attendance-item">
+                                        <div class="row align-items-center">
+                                            <div class="col-md-4">
+                                                <select class="form-select personnel-select">
+                                                    <option value="">انتخاب پرسنل</option>
+                                                    <option value="10" selected>سعید نوروزی (1010)</option>
+                                                    <option value="27">محمدرضا حسینی (1027)</option>
+                                                    <option value="28">عباس رضوانی (1028)</option>
+                                                </select>
+                                            </div>
+                                            <div class="col-md-8">
+                                                <div class="form-check form-check-inline">
+                                                    <input class="form-check-input" type="radio" name="status_10" value="present" checked>
+                                                    <label class="form-check-label">حاضر</label>
+                                                </div>
+                                                <div class="form-check form-check-inline">
+                                                    <input class="form-check-input" type="radio" name="status_10" value="leave">
+                                                    <label class="form-check-label">مرخصی</label>
+                                                </div>
+                                                
+                                                <!-- بخش اضافه کار -->
+                                                <div class="overtime-section mt-3">
+                                                    <h6><i class="bi bi-clock-history"></i> اضافه کار</h6>
+                                                    <div class="row">
+                                                        <div class="col-md-6">
+                                                            <div class="form-check">
+                                                                <input class="form-check-input" type="checkbox" id="overtime_need_10">
+                                                                <label class="form-check-label" for="overtime_need_10">نیاز قسمت</label>
+                                                            </div>
+                                                            <textarea class="form-control mt-2" rows="2" placeholder="توضیحات نیاز قسمت"></textarea>
+                                                        </div>
+                                                        <div class="col-md-6">
+                                                            <div class="form-check">
+                                                                <input class="form-check-input" type="checkbox" id="overtime_substitute_10">
+                                                                <label class="form-check-label" for="overtime_substitute_10">اضافه کار بجای همکار</label>
+                                                            </div>
+                                                            <select class="form-select mt-2">
+                                                                <option value="">انتخاب همکار</option>
+                                                                <option value="12">علیرضا محمودی (1012) - متصدی لهر خط یک</option>
+                                                                <option value="8">محمد رضایی (1008) - متصدی لهر خط دو</option>
+                                                                <option value="27">محمدرضا حسینی (1027) - متصدی لهر خط سه</option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                
+                                                <!-- بخش تعویض -->
+                                                <div class="substitute-section mt-3">
+                                                    <div class="form-check">
+                                                        <input class="form-check-input" type="checkbox" id="substitute_10">
+                                                        <label class="form-check-label" for="substitute_10">تعویض</label>
+                                                    </div>
+                                                    <div class="mt-2" style="display: none;">
+                                                        <label class="form-label">با چه کسی تعویض شده؟</label>
+                                                        <select class="form-select">
+                                                            <option value="">انتخاب پرسنل</option>
+                                                            <option value="12">علیرضا محمودی (1012) - متصدی لهر خط یک</option>
+                                                            <option value="8">محمد رضایی (1008) - متصدی لهر خط دو</option>
+                                                            <option value="27">محمدرضا حسینی (1027) - متصدی لهر خط سه</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <button class="btn btn-sm btn-outline-primary add-personnel-btn">+ افزودن پرسنل دیگر برای این پست</button>
+                            </div>
+
+                            <!-- متصدی برش خط دو و سه -->
+                            <div class="mb-3 position-container" data-position="متصدی برش خط دو و سه">
+                                <label class="form-label">متصدی برش خط دو و سه</label>
+                                <div class="position-personnel">
+                                    <div class="mb-2 p-3 border rounded attendance-item">
+                                        <div class="row align-items-center">
+                                            <div class="col-md-4">
+                                                <select class="form-select personnel-select">
+                                                    <option value="">انتخاب پرسنل</option>
+                                                    <option value="4" selected>رضا کریمی (1004)</option>
+                                                    <option value="29">امیرحسین جعفری (1029)</option>
+                                                    <option value="30">محمدعلی محمدی (1030)</option>
+                                                </select>
+                                            </div>
+                                            <div class="col-md-8">
+                                                <div class="form-check form-check-inline">
+                                                    <input class="form-check-input" type="radio" name="status_4" value="present" checked>
+                                                    <label class="form-check-label">حاضر</label>
+                                                </div>
+                                                <div class="form-check form-check-inline">
+                                                    <input class="form-check-input" type="radio" name="status_4" value="leave">
+                                                    <label class="form-check-label">مرخصی</label>
+                                                </div>
+                                                
+                                                <!-- بخش اضافه کار -->
+                                                <div class="overtime-section mt-3">
+                                                    <h6><i class="bi bi-clock-history"></i> اضافه کار</h6>
+                                                    <div class="row">
+                                                        <div class="col-md-6">
+                                                            <div class="form-check">
+                                                                <input class="form-check-input" type="checkbox" id="overtime_need_4">
+                                                                <label class="form-check-label" for="overtime_need_4">نیاز قسمت</label>
+                                                            </div>
+                                                            <textarea class="form-control mt-2" rows="2" placeholder="توضیحات نیاز قسمت"></textarea>
+                                                        </div>
+                                                        <div class="col-md-6">
+                                                            <div class="form-check">
+                                                                <input class="form-check-input" type="checkbox" id="overtime_substitute_4">
+                                                                <label class="form-check-label" for="overtime_substitute_4">اضافه کار بجای همکار</label>
+                                                            </div>
+                                                            <select class="form-select mt-2">
+                                                                <option value="">انتخاب همکار</option>
+                                                                <option value="11">مهدی جمالی (1011) - متصدی برش و شیشه گیری خط یک</option>
+                                                                <option value="7">اکبر موسوی (1007) - شیشه گیری خط دو و سه</option>
+                                                                <option value="29">امیرحسین جعفری (1029) - متصدی برش خط دو و سه</option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                
+                                                <!-- بخش تعویض -->
+                                                <div class="substitute-section mt-3">
+                                                    <div class="form-check">
+                                                        <input class="form-check-input" type="checkbox" id="substitute_4">
+                                                        <label class="form-check-label" for="substitute_4">تعویض</label>
+                                                    </div>
+                                                    <div class="mt-2" style="display: none;">
+                                                        <label class="form-label">با چه کسی تعویض شده؟</label>
+                                                        <select class="form-select">
+                                                            <option value="">انتخاب پرسنل</option>
+                                                            <option value="11">mهدی جمالی (1011) - متصدی برش و شیشه گیری خط یک</option>
+                                                            <option value="7">اکبر موسوی (1007) - شیشه گیری خط دو و سه</option>
+                                                            <option value="29">امیرحسین جعفری (1029) - متصدی برش خط دو و سه</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <button class="btn btn-sm btn-outline-primary add-personnel-btn">+ افزودن پرسنل دیگر برای این پست</button>
+                            </div>
+
+                            <!-- شیشه گیری خط دو و سه -->
+                            <div class="mb-3 position-container" data-position="شیشه گیری خط دو و سه">
+                                <label class="form-label">شیشه گیری خط دو و سه</label>
+                                <div class="position-personnel">
+                                    <div class="mb-2 p-3 border rounded attendance-item">
+                                        <div class="row align-items-center">
+                                            <div class="col-md-4">
+                                                <select class="form-select personnel-select">
+                                                    <option value="">انتخاب پرسنل</option>
+                                                    <option value="7" selected>اکبر موسوی (1007)</option>
+                                                    <option value="31">حسن رضایی (1031)</option>
+                                                    <option value="32">محمدمهدی نوروزی (1032)</option>
+                                                </select>
+                                            </div>
+                                            <div class="col-md-8">
+                                                <div class="form-check form-check-inline">
+                                                    <input class="form-check-input" type="radio" name="status_7" value="present" checked>
+                                                    <label class="form-check-label">حاضر</label>
+                                                </div>
+                                                <div class="form-check form-check-inline">
+                                                    <input class="form-check-input" type="radio" name="status_7" value="leave">
+                                                    <label class="form-check-label">مرخصی</label>
+                                                </div>
+                                                
+                                                <!-- بخش اضافه کار -->
+                                                <div class="overtime-section mt-3">
+                                                    <h6><i class="bi bi-clock-history"></i> اضافه کار</h6>
+                                                    <div class="row">
+                                                        <div class="col-md-6">
+                                                            <div class="form-check">
+                                                                <input class="form-check-input" type="checkbox" id="overtime_need_7">
+                                                                <label class="form-check-label" for="overtime_need_7">نیاز قسمت</label>
+                                                            </div>
+                                                            <textarea class="form-control mt-2" rows="2" placeholder="توضیحات نیاز قسمت"></textarea>
+                                                        </div>
+                                                        <div class="col-md-6">
+                                                            <div class="form-check">
+                                                                <input class="form-check-input" type="checkbox" id="overtime_substitute_7">
+                                                                <label class="form-check-label" for="overtime_substitute_7">اضافه کار بجای همکار</label>
+                                                            </div>
+                                                            <select class="form-select mt-2">
+                                                                <option value="">انتخاب همکار</option>
+                                                                <option value="11">مهدی جمالی (1011) - متصدی برش و شیشه گیری خط یک</option>
+                                                                <option value="4">رضا کریمی (1004) - متصدی برش خط دو و سه</option>
+                                                                <option value="31">حسن رضایی (1031) - شیشه گیری خط دو و سه</option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                
+                                                <!-- بخش تعویض -->
+                                                <div class="substitute-section mt-3">
+                                                    <div class="form-check">
+                                                        <input class="form-check-input" type="checkbox" id="substitute_7">
+                                                        <label class="form-check-label" for="substitute_7">تعویض</label>
+                                                    </div>
+                                                    <div class="mt-2" style="display: none;">
+                                                        <label class="form-label">با چه کسی تعویض شده؟</label>
+                                                        <select class="form-select">
+                                                            <option value="">انتخاب پرسنل</option>
+                                                            <option value="11">مهدی جمالی (1011) - متصدی برش و شیشه گیری خط یک</option>
+                                                            <option value="4">رضا کریمی (1004) - متصدی برش خط دو و سه</option>
+                                                            <option value="31">حسن رضایی (1031) - شیشه گیری خط دو و سه</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <button class="btn btn-sm btn-outline-primary add-personnel-btn">+ افزودن پرسنل دیگر برای این پست</button>
+                            </div>
+
+                            <!-- سرپرست کوره دو -->
+                            <div class="mb-3 position-container" data-position="سرپرست کوره دو">
+                                <label class="form-label">سرپرست کوره دو</label>
+                                <div class="position-personnel">
+                                    <div class="mb-2 p-3 border rounded attendance-item">
+                                        <div class="row align-items-center">
+                                            <div class="col-md-4">
+                                                <select class="form-select personnel-select">
+                                                    <option value="">انتخاب پرسنل</option>
+                                                    <option value="6" selected>محمد کریمی (1006)</option>
+                                                    <option value="33">حمید احمدپور (1033)</option>
+                                                </select>
+                                            </div>
+                                            <div class="col-md-8">
+                                                <div class="form-check form-check-inline">
+                                                    <input class="form-check-input" type="radio" name="status_6" value="present" checked>
+                                                    <label class="form-check-label">حاضر</label>
+                                                </div>
+                                                <div class="form-check form-check-inline">
+                                                    <input class="form-check-input" type="radio" name="status_6" value="leave">
+                                                    <label class="form-check-label">مرخصی</label>
+                                                </div>
+                                                
+                                                <!-- بخش اضافه کار -->
+                                                <div class="overtime-section mt-3">
+                                                    <h6><i class="bi bi-clock-history"></i> اضافه کار</h6>
+                                                    <div class="row">
+                                                        <div class="col-md-6">
+                                                            <div class="form-check">
+                                                                <input class="form-check-input" type="checkbox" id="overtime_need_6">
+                                                                <label class="form-check-label" for="overtime_need_6">نیاز قسمت</label>
+                                                            </div>
+                                                            <textarea class="form-control mt-2" rows="2" placeholder="توضیحات نیاز قسمت"></textarea>
+                                                        </div>
+                                                        <div class="col-md-6">
+                                                            <div class="form-check">
+                                                                <input class="form-check-input" type="checkbox" id="overtime_substitute_6">
+                                                                <label class="form-check-label" for="overtime_substitute_6">اضافه کار بجای همکار</label>
+                                                            </div>
+                                                            <select class="form-select mt-2">
+                                                                <option value="">انتخاب همکار</option>
+                                                                <option value="5">امیر جعفری (1005) - سرپرست کوره یک</option>
+                                                                <option value="33">حمید احمدپور (1033) - سرپرست کوره دو</option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                
+                                                <!-- بخش تعویض -->
+                                                <div class="substitute-section mt-3">
+                                                    <div class="form-check">
+                                                        <input class="form-check-input" type="checkbox" id="substitute_6">
+                                                        <label class="form-check-label" for="substitute_6">تعویض</label>
+                                                    </div>
+                                                    <div class="mt-2" style="display: none;">
+                                                        <label class="form-label">با چه کسی تعویض شده؟</label>
+                                                        <select class="form-select">
+                                                            <option value="">انتخاب پرسنل</option>
+                                                            <option value="5">امیر جعفری (1005) - سرپرست کوره یک</option>
+                                                            <option value="33">حمید احمدپور (1033) - سرپرست کوره دو</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <button class="btn btn-sm btn-outline-primary add-personnel-btn">+ افزودن پرسنل دیگر برای این پست</button>
+                            </div>
                         </div>
 
                         <div class="d-flex justify-content-between mt-4 no-print">
@@ -947,6 +1449,95 @@
                 } else {
                     overtimeTextarea.slideUp();
                 }
+            });
+            
+            // افزودن پرسنل جدید برای یک پست
+            $('.add-personnel-btn').click(function() {
+                const positionContainer = $(this).closest('.position-container');
+                const position = positionContainer.data('position');
+                const personnelCount = positionContainer.find('.attendance-item').length;
+                const newIndex = personnelCount + 1;
+                
+                const newPersonnelHtml = `
+                    <div class="mb-2 p-3 border rounded attendance-item">
+                        <div class="row align-items-center">
+                            <div class="col-md-4">
+                                <select class="form-select personnel-select">
+                                    <option value="">انتخاب پرسنل</option>
+                                    <option value="1">علی رضایی (1001)</option>
+                                    <option value="2">محمد محمدی (1002)</option>
+                                    <option value="3">حسن حسینی (1003)</option>
+                                    <option value="4">رضا کریمی (1004)</option>
+                                    <option value="5">امیر جعفری (1005)</option>
+                                    <option value="6">محمد کریمی (1006)</option>
+                                    <option value="7">اکبر موسوی (1007)</option>
+                                    <option value="8">محمد رضایی (1008)</option>
+                                    <option value="9">حمید احمدی (1009)</option>
+                                    <option value="10">سعید نوروزی (1010)</option>
+                                    <option value="11">مهدی جمالی (1011)</option>
+                                    <option value="12">علیرضا محمودی (1012)</option>
+                                </select>
+                            </div>
+                            <div class="col-md-8">
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="radio" name="status_${position}_${newIndex}" value="present" checked>
+                                    <label class="form-check-label">حاضر</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="radio" name="status_${position}_${newIndex}" value="leave">
+                                    <label class="form-check-label">مرخصی</label>
+                                </div>
+                                
+                                <!-- بخش اضافه کار -->
+                                <div class="overtime-section mt-3">
+                                    <h6><i class="bi bi-clock-history"></i> اضافه کار</h6>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox" id="overtime_need_${position}_${newIndex}">
+                                                <label class="form-check-label" for="overtime_need_${position}_${newIndex}">نیاز قسمت</label>
+                                            </div>
+                                            <textarea class="form-control mt-2" rows="2" placeholder="توضیحات نیاز قسمت"></textarea>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox" id="overtime_substitute_${position}_${newIndex}">
+                                                <label class="form-check-label" for="overtime_substitute_${position}_${newIndex}">اضافه کار بجای همکار</label>
+                                            </div>
+                                            <select class="form-select mt-2">
+                                                <option value="">انتخاب همکار</option>
+                                                <option value="1">علی رضایی (1001) - ذوبکار کوره یک</option>
+                                                <option value="2">محمد محمدی (1002) - متصدی ماشین خط یک</option>
+                                                <option value="3">حسن حسینی (1003) - ذوبکار کوره دو</option>
+                                                <option value="4">رضا کریمی (1004) - متصدی برش خط دو و سه</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <!-- بخش تعویض -->
+                                <div class="substitute-section mt-3">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" id="substitute_${position}_${newIndex}">
+                                        <label class="form-check-label" for="substitute_${position}_${newIndex}">تعویض</label>
+                                    </div>
+                                    <div class="mt-2" style="display: none;">
+                                        <label class="form-label">با چه کسی تعویض شده؟</label>
+                                        <select class="form-select">
+                                            <option value="">انتخاب پرسنل</option>
+                                            <option value="1">علی رضایی (1001) - ذوبکار کوره یک</option>
+                                            <option value="2">محمد محمدی (1002) - متصدی ماشین خط یک</option>
+                                            <option value="3">حسن حسینی (1003) - ذوبکار کوره دو</option>
+                                            <option value="4">رضا کریمی (1004) - متصدی برش خط دو و سه</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                
+                positionContainer.find('.position-personnel').append(newPersonnelHtml);
             });
             
             // بارگذاری پیش‌فرض
