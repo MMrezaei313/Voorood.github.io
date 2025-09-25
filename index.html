@@ -181,6 +181,14 @@
             border: 1px solid #4caf50;
         }
         
+        .admin-only {
+            display: none;
+        }
+        
+        .role-admin .admin-only {
+            display: block;
+        }
+        
         @media print {
             body * {
                 visibility: hidden;
@@ -277,7 +285,7 @@
                 <li class="nav-item" role="presentation">
                     <button class="nav-link active" id="attendance-tab">ثبت حضور و غیاب</button>
                 </li>
-                <li class="nav-item" role="presentation">
+                <li class="nav-item admin-only" role="presentation">
                     <button class="nav-link" id="personnel-tab">مدیریت پرسنل</button>
                 </li>
             </ul>
@@ -338,8 +346,8 @@
                 </div>
             </div>
 
-            <!-- مدیریت پرسنل -->
-            <div class="tab-pane" id="personnel-pane">
+            <!-- مدیریت پرسنل (فقط برای ادمین) -->
+            <div class="tab-pane admin-only" id="personnel-pane">
                 <div class="card">
                     <div class="card-header">مدیریت پرسنل</div>
                     <div class="card-body">
@@ -433,21 +441,13 @@
     <script src="https://cdn.jsdelivr.net/npm/persian-datepicker@1.2.0/dist/js/persian-datepicker.min.js"></script>
     <script>
         // ==================== تنظیمات JSONBin.io ====================
-        // این مقادیر را با اطلاعات اکانت خودتان جایگزین کنید
         const JSONBIN_API_KEY = '$2a$10$pfqdbmjavY4uTuzMtN1e9.JaUEy8nEXob7Y3EZhD1T0xSSGLz18Uu'; // Master Key از JSONBin
         const JSONBIN_BIN_ID = '68d4cbba43b1c97be94f0bd7'; // Bin ID از JSONBin
         
         // ==================== داده‌های سیستم ====================
-        let personnelData = [
-            { id: 1, name: 'علی', family: 'رضایی', personnelCode: '1001', position: 'ذوبکار کوره یک' },
-            { id: 2, name: 'محمد', family: 'محمدی', personnelCode: '1002', position: 'متصدی ماشین خط یک' },
-            { id: 3, name: 'حسن', family: 'حسینی', personnelCode: '1003', position: 'ذوبکار کوره دو' },
-            { id: 4, name: 'رضا', family: 'کریمی', personnelCode: '1004', position: 'متصدی برش خط دو و سه' },
-            { id: 5, name: 'امیر', family: 'جعفری', personnelCode: '1005', position: 'سرپرست کوره یک' },
-            { id: 6, name: 'محمد', family: 'کریمی', personnelCode: '1006', position: 'سرپرست کوره دو' }
-        ];
-
+        let personnelData = [];
         let attendanceData = [];
+        let currentUserRole = '';
 
         // ==================== توابع JSONBin.io ====================
         async function saveDataToCloud() {
@@ -521,6 +521,20 @@
             } catch (error) {
                 console.error('خطا در بارگذاری:', error);
                 alert('❌ خطا در بارگذاری داده‌ها\nلطفاً اتصال اینترنت و تنظیمات JSONBin را بررسی کنید.');
+            }
+        }
+
+        // ==================== توابع مدیریت دسترسی ====================
+        function setupUserRole(role) {
+            currentUserRole = role;
+            const body = document.body;
+            
+            if (role === 'admin') {
+                body.classList.add('role-admin');
+                body.classList.remove('role-supervisor');
+            } else {
+                body.classList.add('role-supervisor');
+                body.classList.remove('role-admin');
             }
         }
 
@@ -719,10 +733,15 @@
                 
                 if ((username === 'admin' && password === 'admin123') || 
                     (username === 'supervisor' && password === 'sup123')) {
+                    
                     $('#login-page').hide();
                     $('#main-page').show();
                     $('#user-name').text(role === 'admin' ? 'مدیر سیستم' : 'سرپرست شیفت');
                     $('#user-role').text(role === 'admin' ? 'ادمین' : 'سرپرست شیفت');
+                    
+                    // تنظیم دسترسی کاربر
+                    setupUserRole(role);
+                    
                 } else {
                     alert('نام کاربری یا رمز عبور اشتباه است');
                 }
@@ -733,6 +752,7 @@
                 $('#login-page').show();
                 $('#username').val('');
                 $('#password').val('');
+                setupUserRole('');
             });
             
             $('#attendance-tab').click(function() {
