@@ -189,6 +189,67 @@
             display: block;
         }
         
+        .custom-alert {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 1000;
+            min-width: 300px;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        
+        .custom-alert.show {
+            opacity: 1;
+        }
+        
+        .search-box {
+            margin-bottom: 20px;
+        }
+        
+        .stats-card {
+            text-align: center;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+        }
+        
+        .stats-card.present {
+            background-color: #d4edda;
+            border: 1px solid #c3e6cb;
+        }
+        
+        .stats-card.leave {
+            background-color: #fff3cd;
+            border: 1px solid #ffeaa7;
+        }
+        
+        .stats-card.total {
+            background-color: #d1ecf1;
+            border: 1px solid #bee5eb;
+        }
+        
+        .stats-number {
+            font-size: 24px;
+            font-weight: bold;
+            margin: 10px 0;
+        }
+        
+        .reports-section {
+            margin-top: 30px;
+        }
+        
+        .history-item {
+            padding: 10px 15px;
+            border-bottom: 1px solid #eee;
+            cursor: pointer;
+        }
+        
+        .history-item:hover {
+            background-color: #f8f9fa;
+        }
+        
         @media print {
             body * {
                 visibility: hidden;
@@ -240,6 +301,11 @@
         .personnel-table {
             margin-top: 20px;
         }
+        
+        .backup-status {
+            font-size: 0.8rem;
+            color: #6c757d;
+        }
     </style>
 </head>
 <body>
@@ -288,6 +354,9 @@
                 <li class="nav-item admin-only" role="presentation">
                     <button class="nav-link" id="personnel-tab">مدیریت پرسنل</button>
                 </li>
+                <li class="nav-item admin-only" role="presentation">
+                    <button class="nav-link" id="reports-tab">گزارشات و آمار</button>
+                </li>
             </ul>
 
             <!-- ثبت حضور و غیاب -->
@@ -321,6 +390,31 @@
                             </div>
                         </div>
 
+                        <!-- آمار سریع -->
+                        <div class="row mb-4" id="quick-stats">
+                            <div class="col-md-4">
+                                <div class="stats-card total">
+                                    <i class="bi bi-people-fill"></i>
+                                    <div class="stats-number" id="total-count">0</div>
+                                    <div>کل پرسنل</div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="stats-card present">
+                                    <i class="bi bi-check-circle-fill"></i>
+                                    <div class="stats-number" id="present-count">0</div>
+                                    <div>حاضر</div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="stats-card leave">
+                                    <i class="bi bi-clock-history"></i>
+                                    <div class="stats-number" id="leave-count">0</div>
+                                    <div>مرخصی</div>
+                                </div>
+                            </div>
+                        </div>
+
                         <div id="attendance-container">
                             <!-- محتوای حضور و غیاب به صورت پویا ایجاد خواهد شد -->
                         </div>
@@ -336,6 +430,7 @@
                                 </button>
                             </div>
                             <small class="text-muted d-block mt-2">با این دکمه‌ها داده‌ها را بین تمام سیستم‌ها همگام‌سازی کنید</small>
+                            <div class="backup-status mt-2" id="backup-status"></div>
                         </div>
 
                         <div class="d-flex justify-content-between mt-4 no-print">
@@ -397,6 +492,11 @@
                             <button type="submit" class="btn btn-success mt-3">افزودن پرسنل</button>
                         </form>
 
+                        <!-- جستجو -->
+                        <div class="search-box">
+                            <input type="text" class="form-control" id="search-personnel" placeholder="جستجو در پرسنل...">
+                        </div>
+
                         <div class="cloud-section">
                             <h6><i class="bi bi-cloud-arrow-up"></i> مدیریت داده‌های ابری</h6>
                             <div class="btn-group">
@@ -428,12 +528,60 @@
                     </div>
                 </div>
             </div>
+
+            <!-- گزارشات و آمار (فقط برای ادمین) -->
+            <div class="tab-pane admin-only" id="reports-pane">
+                <div class="card">
+                    <div class="card-header">گزارشات و آمار</div>
+                    <div class="card-body">
+                        <div class="highlight-box">
+                            <h5><i class="bi bi-info-circle"></i> راهنما</h5>
+                            <p class="mb-0">در این بخش می‌توانید گزارشات و آمار حضور و غیاب پرسنل را مشاهده نمایید.</p>
+                        </div>
+
+                        <div class="row mb-4">
+                            <div class="col-md-6">
+                                <label for="report-date" class="form-label">تاریخ گزارش</label>
+                                <input type="text" class="form-control date-picker" id="report-date">
+                            </div>
+                            <div class="col-md-6">
+                                <label for="report-shift" class="form-label">شیفت</label>
+                                <select class="form-select" id="report-shift">
+                                    <option value="all">همه شیفت‌ها</option>
+                                    <option value="صبح (۶-۱۴)">صبح (۶-۱۴)</option>
+                                    <option value="عصر (۱۴-۲۲)">عصر (۱۴-۲۲)</option>
+                                    <option value="شب (۲۲-۶)">شب (۲۲-۶)</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <button class="btn btn-primary mb-4" id="generate-report-btn">تولید گزارش</button>
+
+                        <div id="report-results">
+                            <!-- نتایج گزارش در اینجا نمایش داده می‌شود -->
+                        </div>
+
+                        <!-- تاریخچه شیفت‌های قبلی -->
+                        <div class="reports-section">
+                            <h5>تاریخچه شیفت‌های ثبت شده</h5>
+                            <div id="shift-history">
+                                <!-- تاریخچه شیفت‌ها در اینجا نمایش داده می‌شود -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
             
             <!-- دکمه پرینت -->
             <div class="print-btn no-print" title="چاپ گزارش">
                 <i class="bi bi-printer-fill"></i>
             </div>
         </div>
+    </div>
+
+    <!-- آلرت سفارشی -->
+    <div class="alert alert-success custom-alert" role="alert" id="custom-alert">
+        <span id="alert-message"></span>
     </div>
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -452,7 +600,7 @@
         // ==================== توابع JSONBin.io ====================
         async function saveDataToCloud() {
             if (!JSONBIN_API_KEY || JSONBIN_API_KEY.includes('YOUR_MASTER_KEY_HERE')) {
-                alert('لطفاً ابتدا تنظیمات JSONBin.io را انجام دهید');
+                showNotification('لطفاً ابتدا تنظیمات JSONBin.io را انجام دهید', 'warning');
                 return;
             }
 
@@ -476,16 +624,24 @@
                 
                 const result = await response.json();
                 console.log('داده‌ها در ابر ذخیره شد:', result);
-                alert('✅ داده‌ها با موفقیت در فضای ابری ذخیره شدند!\nهمه سیستم‌ها اکنون می‌توانند این داده‌ها را ببینند.');
+                showNotification('✅ داده‌ها با موفقیت در فضای ابری ذخیره شدند!\nهمه سیستم‌ها اکنون می‌توانند این داده‌ها را ببینند.', 'success');
             } catch (error) {
                 console.error('خطا در ذخیره‌سازی:', error);
-                alert('❌ خطا در ذخیره‌سازی داده‌ها\nلطفاً اتصال اینترنت و تنظیمات JSONBin را بررسی کنید.');
+                showNotification('❌ خطا در ذخیره‌سازی داده‌ها\nلطفاً اتصال اینترنت و تنظیمات JSONBin را بررسی کنید.', 'error');
+                
+                // ذخیره‌سازی محلی به عنوان fallback
+                localStorage.setItem('offline_backup', JSON.stringify({
+                    personnel: personnelData,
+                    attendance: attendanceData,
+                    offline: true,
+                    timestamp: new Date().toISOString()
+                }));
             }
         }
 
         async function loadDataFromCloud() {
             if (!JSONBIN_API_KEY || JSONBIN_API_KEY.includes('YOUR_MASTER_KEY_HERE')) {
-                alert('لطفاً ابتدا تنظیمات JSONBin.io را انجام دهید');
+                showNotification('لطفاً ابتدا تنظیمات JSONBin.io را انجام دهید', 'warning');
                 return;
             }
 
@@ -514,13 +670,14 @@
                     // به روزرسانی نمایش
                     loadPersonnelData();
                     renderAttendanceForm();
-                    alert('✅ داده‌ها با موفقیت از فضای ابری بارگذاری شدند!');
+                    updateQuickStats();
+                    showNotification('✅ داده‌ها با موفقیت از فضای ابری بارگذاری شدند!', 'success');
                 } else {
-                    alert('داده‌ای در ابر پیدا نشد');
+                    showNotification('داده‌ای در ابر پیدا نشد', 'warning');
                 }
             } catch (error) {
                 console.error('خطا در بارگذاری:', error);
-                alert('❌ خطا در بارگذاری داده‌ها\nلطفاً اتصال اینترنت و تنظیمات JSONBin را بررسی کنید.');
+                showNotification('❌ خطا در بارگذاری داده‌ها\nلطفاً اتصال اینترنت و تنظیمات JSONBin را بررسی کنید.', 'error');
             }
         }
 
@@ -536,6 +693,183 @@
                 body.classList.add('role-supervisor');
                 body.classList.remove('role-admin');
             }
+        }
+
+        // ==================== توابع جدید اضافه شده ====================
+
+        // نمایش نوتیفیکیشن
+        function showNotification(message, type = 'info') {
+            const alert = $('#custom-alert');
+            const alertMessage = $('#alert-message');
+            
+            alert.removeClass('alert-success alert-warning alert-danger alert-info');
+            
+            switch(type) {
+                case 'success':
+                    alert.addClass('alert-success');
+                    break;
+                case 'warning':
+                    alert.addClass('alert-warning');
+                    break;
+                case 'error':
+                    alert.addClass('alert-danger');
+                    break;
+                default:
+                    alert.addClass('alert-info');
+            }
+            
+            alertMessage.text(message);
+            alert.addClass('show');
+            
+            setTimeout(() => {
+                alert.removeClass('show');
+            }, 5000);
+        }
+
+        // به روزرسانی آمار سریع
+        function updateQuickStats() {
+            const today = new persianDate().format('YYYY/MM/DD');
+            const todayAttendance = attendanceData.filter(a => a.date === today);
+            
+            const presentCount = todayAttendance.filter(a => a.status === 'present').length;
+            const leaveCount = todayAttendance.filter(a => a.status === 'leave').length;
+            const totalCount = personnelData.length;
+            
+            $('#present-count').text(presentCount);
+            $('#leave-count').text(leaveCount);
+            $('#total-count').text(totalCount);
+        }
+
+        // تولید گزارش
+        function generateReport() {
+            const reportDate = $('#report-date').val();
+            const reportShift = $('#report-shift').val();
+            
+            let filteredData = attendanceData;
+            
+            if (reportDate) {
+                filteredData = filteredData.filter(a => a.date === reportDate);
+            }
+            
+            if (reportShift !== 'all') {
+                filteredData = filteredData.filter(a => a.shiftType === reportShift);
+            }
+            
+            const reportResults = $('#report-results');
+            reportResults.empty();
+            
+            if (filteredData.length === 0) {
+                reportResults.html('<div class="alert alert-warning">هیچ داده‌ای برای نمایش وجود ندارد.</div>');
+                return;
+            }
+            
+            let html = `
+                <div class="table-responsive">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>تاریخ</th>
+                                <th>شیفت</th>
+                                <th>پرسنل</th>
+                                <th>وضعیت</th>
+                                <th>اضافه کار</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+            `;
+            
+            filteredData.forEach(record => {
+                const personnel = personnelData.find(p => p.id === record.personnelId);
+                if (personnel) {
+                    html += `
+                        <tr>
+                            <td>${record.date}</td>
+                            <td>${record.shiftType}</td>
+                            <td>${personnel.name} ${personnel.family}</td>
+                            <td>${record.status === 'present' ? 'حاضر' : 'مرخصی'}</td>
+                            <td>${record.overtimeNeed ? '✓' : '✗'}</td>
+                        </tr>
+                    `;
+                }
+            });
+            
+            html += `
+                        </tbody>
+                    </table>
+                </div>
+            `;
+            
+            reportResults.html(html);
+        }
+
+        // بارگذاری تاریخچه شیفت‌ها
+        function loadShiftHistory() {
+            const shiftHistory = $('#shift-history');
+            shiftHistory.empty();
+            
+            // گروه‌بندی بر اساس تاریخ و شیفت
+            const groupedData = {};
+            
+            attendanceData.forEach(record => {
+                const key = `${record.date}-${record.shiftType}`;
+                if (!groupedData[key]) {
+                    groupedData[key] = {
+                        date: record.date,
+                        shiftType: record.shiftType,
+                        count: 0
+                    };
+                }
+                groupedData[key].count++;
+            });
+            
+            const sortedDates = Object.values(groupedData).sort((a, b) => {
+                // مرتب‌سازی بر اساس تاریخ (جدیدترین اول)
+                return b.date.localeCompare(a.date);
+            });
+            
+            sortedDates.forEach(item => {
+                const historyItem = `
+                    <div class="history-item">
+                        <div class="d-flex justify-content-between">
+                            <div>
+                                <strong>${item.date}</strong> - ${item.shiftType}
+                            </div>
+                            <div>
+                                <span class="badge bg-primary">${item.count} پرسنل</span>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                shiftHistory.append(historyItem);
+            });
+        }
+
+        // پشتیبان‌گیری خودکار
+        function setupAutoBackup() {
+            // پشتیبان‌گیری خودکار هر 5 دقیقه
+            setInterval(() => {
+                if (attendanceData.length > 0 || personnelData.length > 0) {
+                    localStorage.setItem('auto_backup', JSON.stringify({
+                        personnel: personnelData,
+                        attendance: attendanceData,
+                        timestamp: new Date().toISOString()
+                    }));
+                    
+                    // نمایش وضعیت پشتیبان‌گیری
+                    const now = new persianDate().format('HH:mm:ss');
+                    $('#backup-status').text(`آخرین پشتیبان‌گیری: ${now}`);
+                }
+            }, 300000); // 5 دقیقه
+        }
+
+        // جستجو در پرسنل
+        function setupSearch() {
+            $('#search-personnel').on('input', function() {
+                const searchTerm = $(this).val().toLowerCase();
+                $('#personnel-list tr').filter(function() {
+                    $(this).toggle($(this).text().toLowerCase().indexOf(searchTerm) > -1);
+                });
+            });
         }
 
         // ==================== بقیه توابع سیستم ====================
@@ -605,6 +939,7 @@
             
             attendanceContainer.html(html);
             setupEventHandlers();
+            updateQuickStats();
         }
 
         function createPositionSection(position) {
@@ -723,6 +1058,9 @@
             // بارگذاری اولیه
             loadPersonnelData();
             renderAttendanceForm();
+            loadShiftHistory();
+            setupSearch();
+            setupAutoBackup();
             
             // مدیریت رویدادها
             $('#login-form').submit(function(e) {
@@ -742,8 +1080,10 @@
                     // تنظیم دسترسی کاربر
                     setupUserRole(role);
                     
+                    showNotification(`خوش آمدید ${role === 'admin' ? 'مدیر سیستم' : 'سرپرست شیفت'}!`, 'success');
+                    
                 } else {
-                    alert('نام کاربری یا رمز عبور اشتباه است');
+                    showNotification('نام کاربری یا رمز عبور اشتباه است', 'error');
                 }
             });
             
@@ -753,6 +1093,7 @@
                 $('#username').val('');
                 $('#password').val('');
                 setupUserRole('');
+                showNotification('با موفقیت از سیستم خارج شدید', 'info');
             });
             
             $('#attendance-tab').click(function() {
@@ -769,6 +1110,14 @@
                 $('#personnel-pane').show();
             });
             
+            $('#reports-tab').click(function() {
+                $('.nav-link').removeClass('active');
+                $(this).addClass('active');
+                $('.tab-pane').hide();
+                $('#reports-pane').show();
+                loadShiftHistory();
+            });
+            
             $(".date-picker").persianDatepicker({
                 format: 'YYYY/MM/DD',
                 observer: true,
@@ -783,7 +1132,14 @@
                 const position = $('#new-position').val();
                 
                 if (!name || !family || !personnelCode || !position) {
-                    alert('لطفا تمام فیلدها را پر کنید.');
+                    showNotification('لطفا تمام فیلدها را پر کنید.', 'warning');
+                    return;
+                }
+                
+                // بررسی تکراری نبودن شماره پرسنلی
+                const exists = personnelData.some(p => p.personnelCode === personnelCode);
+                if (exists) {
+                    showNotification('شماره پرسنلی تکراری است', 'error');
                     return;
                 }
                 
@@ -799,7 +1155,7 @@
                 $('#new-personnelCode').val('');
                 $('#new-position').val('');
                 
-                alert('پرسنل جدید با موفقیت اضافه شد.');
+                showNotification('پرسنل جدید با موفقیت اضافه شد.', 'success');
             });
             
             $(document).on('click', '.delete-personnel', function() {
@@ -811,7 +1167,7 @@
                     localStorage.setItem('personnelData', JSON.stringify(personnelData));
                     loadPersonnelData();
                     renderAttendanceForm();
-                    alert('پرسنل با موفقیت حذف شد.');
+                    showNotification('پرسنل با موفقیت حذف شد.', 'success');
                 }
             });
             
@@ -841,12 +1197,17 @@
                 
                 attendanceData = attendanceRecords;
                 localStorage.setItem('attendanceData', JSON.stringify(attendanceData));
-                alert('اطلاعات حضور و غیاب با موفقیت ذخیره شد.');
+                updateQuickStats();
+                loadShiftHistory();
+                showNotification('اطلاعات حضور و غیاب با موفقیت ذخیره شد.', 'success');
             });
             
             // دکمه‌های ابری
             $('#save-cloud-btn, #save-cloud-btn-2').click(saveDataToCloud);
             $('#load-cloud-btn, #load-cloud-btn-2').click(loadDataFromCloud);
+            
+            // دکمه تولید گزارش
+            $('#generate-report-btn').click(generateReport);
             
             $('.print-btn').click(() => window.print());
         });
